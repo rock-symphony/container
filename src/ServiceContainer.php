@@ -134,13 +134,6 @@ class Container
         }
         
         $this->bindings[$abstract] = compact('concrete', 'shared');
-        
-        // If the abstract type was already resolved in this container we'll fire the
-        // rebound listener so that any objects which have already gotten resolved
-        // can have their copy of the object updated via the listener callbacks.
-        if ($this->resolved($abstract)) {
-            $this->rebound($abstract);
-        }
     }
     
     /**
@@ -221,8 +214,6 @@ class Container
     {
         if (isset($this->instances[$abstract])) {
             $this->instances[$abstract] = $closure($this->instances[$abstract], $this);
-            
-            $this->rebound($abstract);
         } else {
             $this->extenders[$abstract][] = $closure;
         }
@@ -248,16 +239,7 @@ class Container
         
         unset($this->aliases[$abstract]);
         
-        // We'll check to determine if this type has been bound before, and if it has
-        // we will fire the rebound callbacks registered with the container and it
-        // can be updated with consuming classes that have gotten resolved here.
-        $bound = $this->bound($abstract);
-        
         $this->instances[$abstract] = $instance;
-        
-        if ($bound) {
-            $this->rebound($abstract);
-        }
     }
     
     /**
@@ -509,8 +491,6 @@ class Container
             $this->instances[$abstract] = $object;
         }
         
-        $this->fireResolvingCallbacks($abstract, $object);
-        
         $this->resolved[$abstract] = true;
         
         return $object;
@@ -524,10 +504,6 @@ class Container
      */
     protected function getConcrete($abstract)
     {
-        if (! is_null($concrete = $this->getContextualConcrete($abstract))) {
-            return $concrete;
-        }
-        
         // If we don't have a registered resolver or concrete for the type, we'll just
         // assume each type is a concrete name and will attempt to resolve it as is
         // since the container should be able to resolve concretes automatically.
