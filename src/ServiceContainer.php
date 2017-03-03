@@ -67,7 +67,7 @@ class Container
      * @param  string  $abstract
      * @return bool
      */
-    public function bound($abstract)
+    public function isBound($abstract)
     {
         return isset($this->bindings[$abstract]) || isset($this->instances[$abstract]) || $this->isAlias($abstract);
     }
@@ -78,7 +78,7 @@ class Container
      * @param  string  $abstract
      * @return bool
      */
-    public function resolved($abstract)
+    public function isResolved($abstract)
     {
         if ($this->isAlias($abstract)) {
             $abstract = $this->getAlias($abstract);
@@ -162,7 +162,7 @@ class Container
      */
     public function bindIf($abstract, $concrete = null, $shared = false)
     {
-        if (! $this->bound($abstract)) {
+        if (! $this->isBound($abstract)) {
             $this->bind($abstract, $concrete, $shared);
         }
     }
