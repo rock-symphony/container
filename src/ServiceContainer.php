@@ -1,6 +1,5 @@
 <?php
-
-namespace Illuminate\Container;
+namespace RockSymfony\ServiceContainer;
 
 use Closure;
 use ArrayAccess;
@@ -10,7 +9,7 @@ use ReflectionMethod;
 use ReflectionFunction;
 use ReflectionParameter;
 use InvalidArgumentException;
-use Illuminate\Contracts\Container\BindingResolutionException;
+use RockSymfony\ServiceContainer\Exceptions\BindingResolutionException;
 use Illuminate\Contracts\Container\Container as ContainerContract;
 
 class Container implements ArrayAccess, ContainerContract
