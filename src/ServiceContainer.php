@@ -14,13 +14,6 @@ use RockSymfony\ServiceContainer\Exceptions\BindingResolutionException;
 class Container implements ArrayAccess
 {
     /**
-     * The current globally available container (if any).
-     *
-     * @var static
-     */
-    protected static $instance;
-    
-    /**
      * An array of the types that have been resolved.
      *
      * @var array
@@ -68,61 +61,6 @@ class Container implements ArrayAccess
      * @var array
      */
     protected $buildStack = [];
-    
-    /**
-     * The contextual binding map.
-     *
-     * @var array
-     */
-    public $contextual = [];
-    
-    /**
-     * All of the registered rebound callbacks.
-     *
-     * @var array
-     */
-    protected $reboundCallbacks = [];
-    
-    /**
-     * All of the global resolving callbacks.
-     *
-     * @var array
-     */
-    protected $globalResolvingCallbacks = [];
-    
-    /**
-     * All of the global after resolving callbacks.
-     *
-     * @var array
-     */
-    protected $globalAfterResolvingCallbacks = [];
-    
-    /**
-     * All of the resolving callbacks by class type.
-     *
-     * @var array
-     */
-    protected $resolvingCallbacks = [];
-    
-    /**
-     * All of the after resolving callbacks by class type.
-     *
-     * @var array
-     */
-    protected $afterResolvingCallbacks = [];
-    
-    /**
-     * Define a contextual binding.
-     *
-     * @param  string  $concrete
-     * @return \Illuminate\Contracts\Container\ContextualBindingBuilder
-     */
-    public function when($concrete)
-    {
-        $concrete = $this->normalize($concrete);
-        
-        return new ContextualBindingBuilder($this, $concrete);
-    }
     
     /**
      * Determine if the given abstract type has been bound.
@@ -228,19 +166,6 @@ class Container implements ArrayAccess
             
             return $container->$method($concrete, $parameters);
         };
-    }
-    
-    /**
-     * Add a contextual binding to the container.
-     *
-     * @param  string  $concrete
-     * @param  string  $abstract
-     * @param  \Closure|string  $implementation
-     * @return void
-     */
-    public function addContextualBinding($concrete, $abstract, $implementation)
-    {
-        $this->contextual[$this->normalize($concrete)][$this->normalize($abstract)] = $this->normalize($implementation);
     }
     
     /**
@@ -410,67 +335,6 @@ class Container implements ArrayAccess
     protected function extractAlias(array $definition)
     {
         return [key($definition), current($definition)];
-    }
-    
-    /**
-     * Bind a new callback to an abstract's rebind event.
-     *
-     * @param  string    $abstract
-     * @param  \Closure  $callback
-     * @return mixed
-     */
-    public function rebinding($abstract, Closure $callback)
-    {
-        $this->reboundCallbacks[$this->normalize($abstract)][] = $callback;
-        
-        if ($this->bound($abstract)) {
-            return $this->make($abstract);
-        }
-    }
-    
-    /**
-     * Refresh an instance on the given target and method.
-     *
-     * @param  string  $abstract
-     * @param  mixed   $target
-     * @param  string  $method
-     * @return mixed
-     */
-    public function refresh($abstract, $target, $method)
-    {
-        return $this->rebinding($this->normalize($abstract), function ($app, $instance) use ($target, $method) {
-            $target->{$method}($instance);
-        });
-    }
-    
-    /**
-     * Fire the "rebound" callbacks for the given abstract type.
-     *
-     * @param  string  $abstract
-     * @return void
-     */
-    protected function rebound($abstract)
-    {
-        $instance = $this->make($abstract);
-        
-        foreach ($this->getReboundCallbacks($abstract) as $callback) {
-            call_user_func($callback, $this, $instance);
-        }
-    }
-    
-    /**
-     * Get the rebound callbacks for a given type.
-     *
-     * @param  string  $abstract
-     * @return array
-     */
-    protected function getReboundCallbacks($abstract)
-    {
-        if (isset($this->reboundCallbacks[$abstract])) {
-            return $this->reboundCallbacks[$abstract];
-        }
-        
-        return [];
     }
     
     /**
@@ -688,19 +552,6 @@ class Container implements ArrayAccess
     }
     
     /**
-     * Get the contextual concrete binding for the given abstract.
-     *
-     * @param  string  $abstract
-     * @return string|null
-     */
-    protected function getContextualConcrete($abstract)
-    {
-        if (isset($this->contextual[end($this->buildStack)][$abstract])) {
-            return $this->contextual[end($this->buildStack)][$abstract];
-        }
-    }
-    
-    /**
      * Normalize the given class name by removing leading slashes.
      *
      * @param  mixed  $service
@@ -733,7 +584,7 @@ class Container implements ArrayAccess
      * @param  array   $parameters
      * @return mixed
      *
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     * @throws \RockSymfony\ServiceContainer\Exceptions\BindingResolutionException
      */
     public function build($concrete, array $parameters = [])
     {
@@ -827,18 +678,10 @@ class Container implements ArrayAccess
      * @param  \ReflectionParameter  $parameter
      * @return mixed
      *
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     * @throws \RockSymfony\ServiceContainer\Exceptions\BindingResolutionException
      */
     protected function resolveNonClass(ReflectionParameter $parameter)
     {
-        if (! is_null($concrete = $this->getContextualConcrete('$'.$parameter->name))) {
-            if ($concrete instanceof Closure) {
-                return call_user_func($concrete, $this);
-            } else {
-                return $concrete;
-            }
-        }
-        
         if ($parameter->isDefaultValueAvailable()) {
             return $parameter->getDefaultValue();
         }
@@ -854,7 +697,7 @@ class Container implements ArrayAccess
      * @param  \ReflectionParameter  $parameter
      * @return mixed
      *
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     * @throws \RockSymfony\ServiceContainer\Exceptions\BindingResolutionException
      */
     protected function resolveClass(ReflectionParameter $parameter)
     {
@@ -895,72 +738,6 @@ class Container implements ArrayAccess
     }
     
     /**
-     * Register a new resolving callback.
-     *
-     * @param  string    $abstract
-     * @param  \Closure|null  $callback
-     * @return void
-     */
-    public function resolving($abstract, Closure $callback = null)
-    {
-        if (is_null($callback) && $abstract instanceof Closure) {
-            $this->resolvingCallback($abstract);
-        } else {
-            $this->resolvingCallbacks[$this->normalize($abstract)][] = $callback;
-        }
-    }
-    
-    /**
-     * Register a new after resolving callback for all types.
-     *
-     * @param  string   $abstract
-     * @param  \Closure|null $callback
-     * @return void
-     */
-    public function afterResolving($abstract, Closure $callback = null)
-    {
-        if ($abstract instanceof Closure && is_null($callback)) {
-            $this->afterResolvingCallback($abstract);
-        } else {
-            $this->afterResolvingCallbacks[$this->normalize($abstract)][] = $callback;
-        }
-    }
-    
-    /**
-     * Register a new resolving callback by type of its first argument.
-     *
-     * @param  \Closure  $callback
-     * @return void
-     */
-    protected function resolvingCallback(Closure $callback)
-    {
-        $abstract = $this->getFunctionHint($callback);
-        
-        if ($abstract) {
-            $this->resolvingCallbacks[$abstract][] = $callback;
-        } else {
-            $this->globalResolvingCallbacks[] = $callback;
-        }
-    }
-    
-    /**
-     * Register a new after resolving callback by type of its first argument.
-     *
-     * @param  \Closure  $callback
-     * @return void
-     */
-    protected function afterResolvingCallback(Closure $callback)
-    {
-        $abstract = $this->getFunctionHint($callback);
-        
-        if ($abstract) {
-            $this->afterResolvingCallbacks[$abstract][] = $callback;
-        } else {
-            $this->globalAfterResolvingCallbacks[] = $callback;
-        }
-    }
-    
-    /**
      * Get the type hint for this closure's first argument.
      *
      * @param  \Closure  $callback
@@ -981,68 +758,6 @@ class Container implements ArrayAccess
         }
         
         return $expected->getClass()->name;
-    }
-    
-    /**
-     * Fire all of the resolving callbacks.
-     *
-     * @param  string  $abstract
-     * @param  mixed   $object
-     * @return void
-     */
-    protected function fireResolvingCallbacks($abstract, $object)
-    {
-        $this->fireCallbackArray($object, $this->globalResolvingCallbacks);
-        
-        $this->fireCallbackArray(
-          $object, $this->getCallbacksForType(
-          $abstract, $object, $this->resolvingCallbacks
-        )
-        );
-        
-        $this->fireCallbackArray($object, $this->globalAfterResolvingCallbacks);
-        
-        $this->fireCallbackArray(
-          $object, $this->getCallbacksForType(
-          $abstract, $object, $this->afterResolvingCallbacks
-        )
-        );
-    }
-    
-    /**
-     * Get all callbacks for a given type.
-     *
-     * @param  string  $abstract
-     * @param  object  $object
-     * @param  array   $callbacksPerType
-     *
-     * @return array
-     */
-    protected function getCallbacksForType($abstract, $object, array $callbacksPerType)
-    {
-        $results = [];
-        
-        foreach ($callbacksPerType as $type => $callbacks) {
-            if ($type === $abstract || $object instanceof $type) {
-                $results = array_merge($results, $callbacks);
-            }
-        }
-        
-        return $results;
-    }
-    
-    /**
-     * Fire an array of callbacks with an object.
-     *
-     * @param  mixed  $object
-     * @param  array  $callbacks
-     * @return void
-     */
-    protected function fireCallbackArray($object, array $callbacks)
-    {
-        foreach ($callbacks as $callback) {
-            $callback($object, $this);
-        }
     }
     
     /**
@@ -1152,31 +867,6 @@ class Container implements ArrayAccess
         $this->resolved = [];
         $this->bindings = [];
         $this->instances = [];
-    }
-    
-    /**
-     * Set the globally available instance of the container.
-     *
-     * @return static
-     */
-    public static function getInstance()
-    {
-        if (is_null(static::$instance)) {
-            static::$instance = new static;
-        }
-        
-        return static::$instance;
-    }
-    
-    /**
-     * Set the shared instance of the container.
-     *
-     * @param  \Illuminate\Contracts\Container\Container|null  $container
-     * @return static
-     */
-    public static function setInstance(ContainerContract $container = null)
-    {
-        return static::$instance = $container;
     }
     
     /**
