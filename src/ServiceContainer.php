@@ -276,7 +276,7 @@ class ServiceContainer
         
         if (isset($this->tags[$tag])) {
             foreach ($this->tags[$tag] as $abstract) {
-                $results[] = $this->make($abstract);
+                $results[] = $this->resolve($abstract);
             }
         }
         
@@ -402,7 +402,8 @@ class ServiceContainer
             
             unset($parameters[$parameter->name]);
         } elseif ($parameter->getClass()) {
-            $dependencies[] = $this->make($parameter->getClass()->name);
+            $dependencies[] = $this->resolve($parameter->getClass()->name);
+            
         } elseif ($parameter->isDefaultValueAvailable()) {
             $dependencies[] = $parameter->getDefaultValue();
         }
@@ -431,7 +432,7 @@ class ServiceContainer
             throw new InvalidArgumentException('Method not provided.');
         }
         
-        return $this->call([$this->make($segments[0]), $method], $parameters);
+        return $this->call([$this->resolve($segments[0]), $method], $parameters);
     }
     
     /**
@@ -444,7 +445,7 @@ class ServiceContainer
     public function factory($abstract, array $defaults = [])
     {
         return function (array $params = []) use ($abstract, $defaults) {
-            return $this->make($abstract, $params + $defaults);
+            return $this->resolve($abstract, $params + $defaults);
         };
     }
     
@@ -455,7 +456,7 @@ class ServiceContainer
      * @param  array   $parameters
      * @return mixed
      */
-    public function make($abstract, array $parameters = [])
+    public function resolve($abstract, array $parameters = [])
     {
         $abstract = $this->getAlias($abstract);
         
@@ -471,10 +472,14 @@ class ServiceContainer
         // We're ready to instantiate an instance of the concrete type registered for
         // the binding. This will instantiate the types, as well as resolve any of
         // its "nested" dependencies recursively until all have gotten resolved.
-        if ($this->isBuildable($concrete, $abstract)) {
-            $object = $this->build($concrete, $parameters);
+        if ($concrete === $abstract) {
+            $object = $this->instantiate($concrete, $parameters);
+            
+        } elseif ($concrete instanceof Closure) {
+            $object = $concrete($this, $parameters);
+            
         } else {
-            $object = $this->make($concrete, $parameters);
+            $object = $this->resolve($concrete, $parameters);
         }
         
         // If we defined any extenders for this type, we'll need to spin through them
@@ -538,15 +543,8 @@ class ServiceContainer
      *
      * @throws \RockSymfony\ServiceContainer\Exceptions\BindingResolutionException
      */
-    public function build($concrete, array $parameters = [])
+    public function instantiate($concrete, array $parameters = [])
     {
-        // If the concrete type is actually a Closure, we will just execute it and
-        // hand back the results of the functions, which allows functions to be
-        // used as resolvers for more fine-tuned resolution of these objects.
-        if ($concrete instanceof Closure) {
-            return $concrete($this, $parameters);
-        }
-        
         $reflector = new ReflectionClass($concrete);
         
         // If the type is not instantiable, the developer is attempting to resolve
@@ -654,7 +652,7 @@ class ServiceContainer
     protected function resolveClass(ReflectionParameter $parameter)
     {
         try {
-            return $this->make($parameter->getClass()->name);
+            return $this->resolve($parameter->getClass()->name);
         }
             
             // If we can not resolve the class instance, we will check to see if the value
@@ -729,18 +727,6 @@ class ServiceContainer
         }
         
         return $this->bindings[$abstract]['shared'] === true;
-    }
-    
-    /**
-     * Determine if the given concrete is buildable.
-     *
-     * @param  mixed   $concrete
-     * @param  string  $abstract
-     * @return bool
-     */
-    protected function isBuildable($concrete, $abstract)
-    {
-        return $concrete === $abstract || $concrete instanceof Closure;
     }
     
     /**
