@@ -69,8 +69,6 @@ class Container
      */
     public function bound($abstract)
     {
-        $abstract = $this->normalize($abstract);
-        
         return isset($this->bindings[$abstract]) || isset($this->instances[$abstract]) || $this->isAlias($abstract);
     }
     
@@ -82,8 +80,6 @@ class Container
      */
     public function resolved($abstract)
     {
-        $abstract = $this->normalize($abstract);
-        
         if ($this->isAlias($abstract)) {
             $abstract = $this->getAlias($abstract);
         }
@@ -99,7 +95,7 @@ class Container
      */
     public function isAlias($name)
     {
-        return isset($this->aliases[$this->normalize($name)]);
+        return isset($this->aliases[$name]);
     }
     
     /**
@@ -112,10 +108,6 @@ class Container
      */
     public function bind($abstract, $concrete = null, $shared = false)
     {
-        $abstract = $this->normalize($abstract);
-        
-        $concrete = $this->normalize($concrete);
-        
         // If the given types are actually an array, we will assume an alias is being
         // defined and will grab this "real" abstract class name and register this
         // alias with the container so that it can be used as a shortcut for it.
@@ -227,8 +219,6 @@ class Container
      */
     public function extend($abstract, Closure $closure)
     {
-        $abstract = $this->normalize($abstract);
-        
         if (isset($this->instances[$abstract])) {
             $this->instances[$abstract] = $closure($this->instances[$abstract], $this);
             
@@ -247,8 +237,6 @@ class Container
      */
     public function instance($abstract, $instance)
     {
-        $abstract = $this->normalize($abstract);
-        
         // First, we will extract the alias from the abstract if it is an array so we
         // are using the correct name when binding the type. If we get an alias it
         // will be registered with the container so we can resolve it out later.
@@ -289,7 +277,7 @@ class Container
             }
             
             foreach ((array) $abstracts as $abstract) {
-                $this->tags[$tag][] = $this->normalize($abstract);
+                $this->tags[$tag][] = $abstract;
             }
         }
     }
@@ -322,7 +310,7 @@ class Container
      */
     public function alias($abstract, $alias)
     {
-        $this->aliases[$alias] = $this->normalize($abstract);
+        $this->aliases[$alias] = $abstract;
     }
     
     /**
@@ -487,7 +475,7 @@ class Container
      */
     public function make($abstract, array $parameters = [])
     {
-        $abstract = $this->getAlias($this->normalize($abstract));
+        $abstract = $this->getAlias($abstract);
         
         // If an instance of the type is currently being managed as a singleton we'll
         // just return an existing instance instead of instantiating new instances
@@ -548,17 +536,6 @@ class Container
         }
         
         return $this->bindings[$abstract]['concrete'];
-    }
-    
-    /**
-     * Normalize the given class name by removing leading slashes.
-     *
-     * @param  mixed  $service
-     * @return mixed
-     */
-    protected function normalize($service)
-    {
-        return is_string($service) ? ltrim($service, '\\') : $service;
     }
     
     /**
@@ -767,8 +744,6 @@ class Container
      */
     public function isShared($abstract)
     {
-        $abstract = $this->normalize($abstract);
-        
         if (isset($this->instances[$abstract])) {
             return true;
         }
@@ -842,7 +817,7 @@ class Container
      */
     public function forgetInstance($abstract)
     {
-        unset($this->instances[$this->normalize($abstract)]);
+        unset($this->instances[$abstract]);
     }
     
     /**
