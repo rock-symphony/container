@@ -10,9 +10,8 @@ use ReflectionFunction;
 use ReflectionParameter;
 use InvalidArgumentException;
 use RockSymfony\ServiceContainer\Exceptions\BindingResolutionException;
-use Illuminate\Contracts\Container\Container as ContainerContract;
 
-class Container implements ArrayAccess, ContainerContract
+class Container implements ArrayAccess
 {
     /**
      * The current globally available container (if any).
