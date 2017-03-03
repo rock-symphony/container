@@ -10,7 +10,7 @@ use ReflectionParameter;
 use InvalidArgumentException;
 use RockSymfony\ServiceContainer\Exceptions\BindingResolutionException;
 
-class Container
+class ServiceContainer
 {
     /**
      * An array of the types that have been resolved.
