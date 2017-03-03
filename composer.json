@@ -1,5 +1,12 @@
 {
     "require": {
         "phpunit/phpunit": "4.*"
+    },
+
+    "autoload": {
+        "psr-4": {
+            "RockSymfony\\ServiceContainer\\": "src/",
+            "RockSymfony\\ServiceContainer\\Tests\\": "tests/"
+        }
     }
 }
