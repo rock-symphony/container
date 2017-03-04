@@ -5,7 +5,7 @@ use DateTime;
 use PHPUnit\Framework\TestCase;
 use RockSymfony\ServiceContainer\ServiceContainer;
 
-class ServiceContainerTest extends TestCase
+class BindTest extends TestCase
 {
     /** @var ServiceContainer */
     private $container;
