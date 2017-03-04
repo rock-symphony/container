@@ -9,9 +9,11 @@ use ReflectionMethod;
 use ReflectionFunction;
 use ReflectionParameter;
 use InvalidArgumentException;
+use RockSymfony\ServiceContainer\Exceptions\BindingNotFoundException;
 use RockSymfony\ServiceContainer\Exceptions\BindingResolutionException;
+use RockSymfony\Contract\ServiceContainer as ServiceContainerContract;
 
-class ServiceContainer
+class ServiceContainer implements ServiceContainerContract
 {
     /**
      * An array of the types that have been resolved.
@@ -100,41 +102,43 @@ class ServiceContainer
     }
     
     /**
-     * Register a binding with the container.
+     * Sets an entry resolver closure function.
      *
-     * @param  string|array  $abstract
-     * @param  \Closure|string|null  $concrete
-     * @param  bool  $shared
+     * If $shared is true, resolution result will be stored for all future gets/resolutions.
+     *
+     * @param string  $id       Service identifier or FQCN
+     * @param Closure $resolver Resolver closure function which result will be used as resolved instance
+     * @param bool    $shared   Reuse resolution result for future requests of same $id
      * @return void
      */
-    public function bind($abstract, $concrete = null, $shared = false)
+    public function bind($id, Closure $resolver, $shared = false)
     {
         // If the given types are actually an array, we will assume an alias is being
         // defined and will grab this "real" abstract class name and register this
         // alias with the container so that it can be used as a shortcut for it.
-        if (is_array($abstract)) {
-            list($abstract, $alias) = $this->extractAlias($abstract);
+        if (is_array($id)) {
+            list($id, $alias) = $this->extractAlias($id);
             
-            $this->alias($abstract, $alias);
+            $this->alias($id, $alias);
         }
         
         // If no concrete type was given, we will simply set the concrete type to the
         // abstract type. After that, the concrete type to be registered as shared
         // without being forced to state their classes in both of the parameters.
-        $this->dropStaleInstances($abstract);
+        $this->dropStaleInstances($id);
         
-        if (is_null($concrete)) {
-            $concrete = $abstract;
+        if (is_null($resolver)) {
+            $resolver = $id;
         }
         
         // If the factory is not a Closure, it means it is just a class name which is
         // bound into this container to the abstract type and we will just wrap it
         // up inside its own Closure to give us more convenience when extending.
-        if (! $concrete instanceof Closure) {
-            $concrete = $this->getClosure($abstract, $concrete);
+        if (! $resolver instanceof Closure) {
+            $resolver = $this->getClosure($id, $resolver);
         }
         
-        $this->bindings[$abstract] = compact('concrete', 'shared');
+        $this->bindings[$id] = compact('resolver', 'shared');
     }
     
     /**
@@ -810,5 +814,50 @@ class ServiceContainer
         $this->resolved = [];
         $this->bindings = [];
         $this->instances = [];
+    }
+    
+    /**
+     * Finds an entry of the container by its identifier and returns it.
+     *
+     * @param string $id Identifier of the entry to look for.
+     *
+     * @throws BindingNotFoundException No entry was found for **this** identifier.
+     * @throws BindingResolutionException Error while retrieving the entry.
+     *
+     * @return mixed Entry.
+     */
+    public function get($id)
+    {
+        if (! $this->isBound($id)) {
+            throw new BindingNotFoundException("Requested [$id] binding cannot be found.");
+        }
+        return $this->resolve($id);
+    }
+    
+    /**
+     * Returns true if the container can return an entry for the given identifier.
+     * Returns false otherwise.
+     *
+     * `has($id)` returning true does not mean that `get($id)` will not throw an exception.
+     * It does however mean that `get($id)` will not throw a `NotFoundExceptionInterface`.
+     *
+     * @param string $id Identifier of the entry to look for.
+     *
+     * @return bool
+     */
+    public function has($id)
+    {
+        return $this->isBound($id);
+    }
+    
+    /**
+     * Sets an entry of the container by its identifier.
+     *
+     * @param string $id       Identifier of the entry to look for.
+     * @param mixed  $instance Entry
+     */
+    public function set($id, $instance)
+    {
+        $this->instance($id, $instance);
     }
 }
