@@ -41,4 +41,13 @@ class SetAndGetTest extends TestCase
         $this->assertInstanceOf(__CLASS__, $test);
         $this->assertSame($this, $test);
     }
+    
+    /**
+     * @test
+     */
+    public function it_should_fail_if_unknown_binding_requested()
+    {
+        $this->setExpectedException('RockSymfony\ServiceContainer\Exceptions\BindingResolutionException');
+        $this->container->resolve('unicorn');
+    }
 }

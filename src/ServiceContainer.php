@@ -4,6 +4,7 @@ namespace RockSymfony\ServiceContainer;
 use Closure;
 use LogicException;
 use ReflectionClass;
+use ReflectionException;
 use ReflectionMethod;
 use ReflectionFunction;
 use ReflectionParameter;
@@ -545,7 +546,13 @@ class ServiceContainer
      */
     public function instantiate($concrete, array $parameters = [])
     {
-        $reflector = new ReflectionClass($concrete);
+        try {
+            $reflector = new ReflectionClass($concrete);
+        } catch (ReflectionException $exception) {
+            // wrap ReflectionException with service container
+            throw new BindingResolutionException("Target [$concrete] class cannot be found.", 0, $exception);
+        }
+        
         
         // If the type is not instantiable, the developer is attempting to resolve
         // an abstract type such as an Interface of Abstract Class and there is
