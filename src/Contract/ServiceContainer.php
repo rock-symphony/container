@@ -55,6 +55,15 @@ interface ServiceContainer extends PsrContainerInterface
     public function bind($id, Closure $resolver, $shared = false);
     
     /**
+     * Makes the same binding/entry be available by another name.
+     *
+     * @param string $id    Original binding/entry
+     * @param string $alias Another name that should also resolve to original entry
+     * @return void
+     */
+    public function alias($id, $alias);
+    
+    /**
      * Creates an instance of any class resolving dependencies recursively.
      *
      * @param string $class

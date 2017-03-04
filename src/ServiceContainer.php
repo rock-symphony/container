@@ -289,15 +289,15 @@ class ServiceContainer implements ServiceContainerContract
     }
     
     /**
-     * Alias a type to a different name.
+     * Makes the same binding/entry be available by another name.
      *
-     * @param  string  $abstract
-     * @param  string  $alias
+     * @param string $id    Original binding/entry
+     * @param string $alias Another name that should also resolve to original entry
      * @return void
      */
-    public function alias($abstract, $alias)
+    public function alias($id, $alias)
     {
-        $this->aliases[$alias] = $abstract;
+        $this->aliases[$alias] = $id;
     }
     
     /**
