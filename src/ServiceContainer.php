@@ -3,7 +3,6 @@ namespace RockSymfony\ServiceContainer;
 
 use Closure;
 use LogicException;
-use Psr\Container\ContainerInterface;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;
@@ -12,8 +11,9 @@ use ReflectionParameter;
 use InvalidArgumentException;
 use RockSymfony\ServiceContainer\Exceptions\BindingNotFoundException;
 use RockSymfony\ServiceContainer\Exceptions\BindingResolutionException;
+use RockSymfony\Contract\ServiceContainer as ServiceContainerContract;
 
-class ServiceContainer implements ContainerInterface
+class ServiceContainer implements ServiceContainerContract
 {
     /**
      * An array of the types that have been resolved.
@@ -846,5 +846,16 @@ class ServiceContainer implements ContainerInterface
     public function has($id)
     {
         return $this->isBound($id);
+    }
+    
+    /**
+     * Sets an entry of the container by its identifier.
+     *
+     * @param string $id       Identifier of the entry to look for.
+     * @param mixed  $instance Entry
+     */
+    public function set($id, $instance)
+    {
+        $this->instance($id, $instance);
     }
 }
