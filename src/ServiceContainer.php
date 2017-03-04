@@ -113,32 +113,12 @@ class ServiceContainer implements ServiceContainerContract
      */
     public function bind($id, Closure $resolver, $shared = false)
     {
-        // If the given types are actually an array, we will assume an alias is being
-        // defined and will grab this "real" abstract class name and register this
-        // alias with the container so that it can be used as a shortcut for it.
-        if (is_array($id)) {
-            list($id, $alias) = $this->extractAlias($id);
-            
-            $this->alias($id, $alias);
-        }
-        
         // If no concrete type was given, we will simply set the concrete type to the
         // abstract type. After that, the concrete type to be registered as shared
         // without being forced to state their classes in both of the parameters.
         $this->dropStaleInstances($id);
         
-        if (is_null($resolver)) {
-            $resolver = $id;
-        }
-        
-        // If the factory is not a Closure, it means it is just a class name which is
-        // bound into this container to the abstract type and we will just wrap it
-        // up inside its own Closure to give us more convenience when extending.
-        if (! $resolver instanceof Closure) {
-            $resolver = $this->getClosure($id, $resolver);
-        }
-        
-        $this->bindings[$id] = compact('resolver', 'shared');
+        $this->bindings[$id] = ['resolver' => $resolver, 'shared' => $shared];
     }
     
     /**
@@ -233,15 +213,6 @@ class ServiceContainer implements ServiceContainerContract
      */
     public function instance($abstract, $instance)
     {
-        // First, we will extract the alias from the abstract if it is an array so we
-        // are using the correct name when binding the type. If we get an alias it
-        // will be registered with the container so we can resolve it out later.
-        if (is_array($abstract)) {
-            list($abstract, $alias) = $this->extractAlias($abstract);
-            
-            $this->alias($abstract, $alias);
-        }
-        
         unset($this->aliases[$abstract]);
         
         $this->instances[$abstract] = $instance;
@@ -298,17 +269,6 @@ class ServiceContainer implements ServiceContainerContract
     public function alias($id, $alias)
     {
         $this->aliases[$alias] = $id;
-    }
-    
-    /**
-     * Extract the type and alias from a given definition.
-     *
-     * @param  array  $definition
-     * @return array
-     */
-    protected function extractAlias(array $definition)
-    {
-        return [key($definition), current($definition)];
     }
     
     /**
