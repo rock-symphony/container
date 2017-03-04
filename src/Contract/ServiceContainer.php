@@ -47,12 +47,12 @@ interface ServiceContainer extends PsrContainerInterface
      *
      * If $shared is true, resolution result will be stored for all future gets/resolutions.
      *
-     * @param string  $id
-     * @param Closure $concrete
-     * @param bool    $shared
-     * @return
+     * @param string  $id       Service identifier or FQCN
+     * @param Closure $resolver Resolver closure function which result will be used as resolved instance
+     * @param bool    $shared   Reuse resolution result for future requests of same $id
+     * @return void
      */
-    public function bind($id, Closure $concrete, $shared = false);
+    public function bind($id, Closure $resolver, $shared = false);
     
     /**
      * Creates an instance of any class resolving dependencies recursively.
