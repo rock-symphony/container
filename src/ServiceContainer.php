@@ -95,6 +95,51 @@ class ServiceContainer implements ServiceContainerContract
     }
     
     /**
+     * Finds an entry of the container by its identifier and returns it.
+     *
+     * @param string $id Identifier of the entry to look for.
+     *
+     * @throws BindingNotFoundException No entry was found for **this** identifier.
+     * @throws BindingResolutionException Error while retrieving the entry.
+     *
+     * @return mixed Entry.
+     */
+    public function get($id)
+    {
+        if (! $this->isBound($id)) {
+            throw new BindingNotFoundException("Requested [$id] binding cannot be found.");
+        }
+        return $this->resolve($id);
+    }
+    
+    /**
+     * Returns true if the container can return an entry for the given identifier.
+     * Returns false otherwise.
+     *
+     * `has($id)` returning true does not mean that `get($id)` will not throw an exception.
+     * It does however mean that `get($id)` will not throw a `NotFoundExceptionInterface`.
+     *
+     * @param string $id Identifier of the entry to look for.
+     *
+     * @return bool
+     */
+    public function has($id)
+    {
+        return $this->isBound($id);
+    }
+    
+    /**
+     * Sets an entry of the container by its identifier.
+     *
+     * @param string $id       Identifier of the entry to look for.
+     * @param mixed  $instance Entry
+     */
+    public function set($id, $instance)
+    {
+        $this->instance($id, $instance);
+    }
+    
+    /**
      * Sets an entry resolver closure function.
      *
      * If $shared is true, resolution result will be stored for all future gets/resolutions.
@@ -112,18 +157,6 @@ class ServiceContainer implements ServiceContainerContract
         $this->dropStaleInstances($id);
         
         $this->bindings[$id] = ['resolver' => $resolver, 'shared' => $shared];
-    }
-    
-    /**
-     * Register a shared binding in the container.
-     *
-     * @param  string|array  $abstract
-     * @param  \Closure|string|null  $concrete
-     * @return void
-     */
-    public function singleton($abstract, $concrete = null)
-    {
-        $this->bind($abstract, $concrete, true);
     }
     
     /**
@@ -607,50 +640,5 @@ class ServiceContainer implements ServiceContainerContract
     protected function dropStaleInstances($abstract)
     {
         unset($this->instances[$abstract], $this->aliases[$abstract]);
-    }
-
-    /**
-     * Finds an entry of the container by its identifier and returns it.
-     *
-     * @param string $id Identifier of the entry to look for.
-     *
-     * @throws BindingNotFoundException No entry was found for **this** identifier.
-     * @throws BindingResolutionException Error while retrieving the entry.
-     *
-     * @return mixed Entry.
-     */
-    public function get($id)
-    {
-        if (! $this->isBound($id)) {
-            throw new BindingNotFoundException("Requested [$id] binding cannot be found.");
-        }
-        return $this->resolve($id);
-    }
-    
-    /**
-     * Returns true if the container can return an entry for the given identifier.
-     * Returns false otherwise.
-     *
-     * `has($id)` returning true does not mean that `get($id)` will not throw an exception.
-     * It does however mean that `get($id)` will not throw a `NotFoundExceptionInterface`.
-     *
-     * @param string $id Identifier of the entry to look for.
-     *
-     * @return bool
-     */
-    public function has($id)
-    {
-        return $this->isBound($id);
-    }
-    
-    /**
-     * Sets an entry of the container by its identifier.
-     *
-     * @param string $id       Identifier of the entry to look for.
-     * @param mixed  $instance Entry
-     */
-    public function set($id, $instance)
-    {
-        $this->instance($id, $instance);
     }
 }
