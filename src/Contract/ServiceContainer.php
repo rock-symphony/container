@@ -1,5 +1,5 @@
 <?php
-namespace RockSymfony\Contract;
+namespace RockSymfony\ServiceContainer\Contract;
 
 use Closure;
 use Psr\Container\ContainerInterface as PsrContainerInterface;

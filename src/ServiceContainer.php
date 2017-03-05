@@ -11,7 +11,7 @@ use ReflectionParameter;
 use InvalidArgumentException;
 use RockSymfony\ServiceContainer\Exceptions\BindingNotFoundException;
 use RockSymfony\ServiceContainer\Exceptions\BindingResolutionException;
-use RockSymfony\Contract\ServiceContainer as ServiceContainerContract;
+use RockSymfony\ServiceContainer\Contract\ServiceContainer as ServiceContainerContract;
 
 class ServiceContainer implements ServiceContainerContract
 {
