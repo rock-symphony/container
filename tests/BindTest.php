@@ -20,17 +20,17 @@ class BindTest extends TestCase
      */
     public function it_should_bind_and_resolve_services()
     {
-        $this->assertFalse($this->container->isBound('now'));
+        $this->assertFalse($this->container->has('now'));
         
         $this->container->bind('now', function () {
             return new DateTime();
         });
     
-        $this->assertTrue($this->container->isBound('now'));
+        $this->assertTrue($this->container->has('now'));
         
         $now = $this->container->resolve('now');
     
-        $this->assertTrue($this->container->isBound('now'));
+        $this->assertTrue($this->container->has('now'));
         
         $this->assertTrue($now instanceof DateTime);
     }
@@ -40,7 +40,7 @@ class BindTest extends TestCase
      */
     public function it_should_not_share_services_by_default()
     {
-        $this->assertFalse($this->container->isBound('now'));
+        $this->assertFalse($this->container->has('now'));
         
         $this->container->bind('now', function () {
             return new DateTime();
@@ -57,7 +57,7 @@ class BindTest extends TestCase
      */
     public function it_should_share_services_if_asked()
     {
-        $this->assertFalse($this->container->isBound('now'));
+        $this->assertFalse($this->container->has('now'));
         
         $this->container->bind('now', function () {
             return new DateTime();

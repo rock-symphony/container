@@ -58,14 +58,19 @@ class ServiceContainer implements ServiceContainerContract
     protected $buildStack = [];
     
     /**
-     * Determine if the given abstract type has been bound.
+     * Returns true if the container can return an entry for the given identifier.
+     * Returns false otherwise.
      *
-     * @param  string  $abstract
+     * `has($id)` returning true does not mean that `get($id)` will not throw an exception.
+     * It does however mean that `get($id)` will not throw a `NotFoundExceptionInterface`.
+     *
+     * @param string $id Identifier of the entry to look for.
+     *
      * @return bool
      */
-    public function isBound($abstract)
+    public function has($id)
     {
-        return isset($this->bindings[$abstract]) || isset($this->instances[$abstract]) || $this->isAlias($abstract);
+        return isset($this->bindings[$id]) || isset($this->instances[$id]) || $this->isAlias($id);
     }
     
     /**
@@ -80,26 +85,10 @@ class ServiceContainer implements ServiceContainerContract
      */
     public function get($id)
     {
-        if (! $this->isBound($id)) {
+        if (! $this->has($id)) {
             throw new BindingNotFoundException("Requested [$id] binding cannot be found.");
         }
         return $this->resolve($id);
-    }
-    
-    /**
-     * Returns true if the container can return an entry for the given identifier.
-     * Returns false otherwise.
-     *
-     * `has($id)` returning true does not mean that `get($id)` will not throw an exception.
-     * It does however mean that `get($id)` will not throw a `NotFoundExceptionInterface`.
-     *
-     * @param string $id Identifier of the entry to look for.
-     *
-     * @return bool
-     */
-    public function has($id)
-    {
-        return $this->isBound($id);
     }
     
     /**
