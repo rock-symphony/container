@@ -69,17 +69,6 @@ class ServiceContainer implements ServiceContainerContract
     }
     
     /**
-     * Determine if a given string is an alias.
-     *
-     * @param  string  $name
-     * @return bool
-     */
-    public function isAlias($name)
-    {
-        return isset($this->aliases[$name]);
-    }
-    
-    /**
      * Finds an entry of the container by its identifier and returns it.
      *
      * @param string $id Identifier of the entry to look for.
@@ -227,7 +216,7 @@ class ServiceContainer implements ServiceContainerContract
      * @param  mixed  $callback
      * @return bool
      */
-    protected function isCallableWithAtSign($callback)
+    private function isCallableWithAtSign($callback)
     {
         return is_string($callback) && strpos($callback, '@') !== false;
     }
@@ -239,7 +228,7 @@ class ServiceContainer implements ServiceContainerContract
      * @param  array  $parameters
      * @return array
      */
-    protected function getMethodDependencies($callback, array $parameters = [])
+    private function getMethodDependencies($callback, array $parameters = [])
     {
         $dependencies = [];
         
@@ -256,7 +245,7 @@ class ServiceContainer implements ServiceContainerContract
      * @param  callable|string  $callback
      * @return \ReflectionFunctionAbstract
      */
-    protected function getCallReflector($callback)
+    private function getCallReflector($callback)
     {
         if (is_string($callback) && strpos($callback, '::') !== false) {
             $callback = explode('::', $callback);
@@ -277,7 +266,7 @@ class ServiceContainer implements ServiceContainerContract
      * @param  array  $dependencies
      * @return void
      */
-    protected function addDependencyForCallParameter(ReflectionParameter $parameter, array &$parameters, &$dependencies)
+    private function addDependencyForCallParameter(ReflectionParameter $parameter, array &$parameters, &$dependencies)
     {
         if (array_key_exists($parameter->name, $parameters)) {
             $dependencies[] = $parameters[$parameter->name];
@@ -301,7 +290,7 @@ class ServiceContainer implements ServiceContainerContract
      *
      * @throws \InvalidArgumentException
      */
-    protected function callClass($target, array $parameters = [], $defaultMethod = null)
+    private function callClass($target, array $parameters = [], $defaultMethod = null)
     {
         $segments = explode('@', $target);
         
@@ -389,7 +378,7 @@ class ServiceContainer implements ServiceContainerContract
      * @param  string $abstract
      * @return string|Closure $concrete
      */
-    protected function getConcrete($abstract)
+    private function getConcrete($abstract)
     {
         // If we don't have a registered resolver or concrete for the type, we'll just
         // assume each type is a concrete name and will attempt to resolve it as is
@@ -407,7 +396,7 @@ class ServiceContainer implements ServiceContainerContract
      * @param  string  $abstract
      * @return array
      */
-    protected function getExtenders($abstract)
+    private function getExtenders($abstract)
     {
         if (isset($this->extenders[$abstract])) {
             return $this->extenders[$abstract];
@@ -488,7 +477,7 @@ class ServiceContainer implements ServiceContainerContract
      * @param  array  $primitives
      * @return array
      */
-    protected function getDependencies(array $parameters, array $primitives = [])
+    private function getDependencies(array $parameters, array $primitives = [])
     {
         $dependencies = [];
         
@@ -518,7 +507,7 @@ class ServiceContainer implements ServiceContainerContract
      *
      * @throws \RockSymfony\ServiceContainer\Exceptions\BindingResolutionException
      */
-    protected function resolveNonClass(ReflectionParameter $parameter)
+    private function resolveNonClass(ReflectionParameter $parameter)
     {
         if ($parameter->isDefaultValueAvailable()) {
             return $parameter->getDefaultValue();
@@ -537,7 +526,7 @@ class ServiceContainer implements ServiceContainerContract
      *
      * @throws \RockSymfony\ServiceContainer\Exceptions\BindingResolutionException
      */
-    protected function resolveClass(ReflectionParameter $parameter)
+    private function resolveClass(ReflectionParameter $parameter)
     {
         try {
             return $this->resolve($parameter->getClass()->name);
@@ -562,7 +551,7 @@ class ServiceContainer implements ServiceContainerContract
      * @param  array  $parameters
      * @return array
      */
-    protected function keyParametersByArgument(array $dependencies, array $parameters)
+    private function keyParametersByArgument(array $dependencies, array $parameters)
     {
         foreach ($parameters as $key => $value) {
             if (is_numeric($key)) {
@@ -582,7 +571,7 @@ class ServiceContainer implements ServiceContainerContract
      * @param  string  $abstract
      * @return bool
      */
-    public function isShared($abstract)
+    private function isShared($abstract)
     {
         if (isset($this->instances[$abstract])) {
             return true;
@@ -596,6 +585,17 @@ class ServiceContainer implements ServiceContainerContract
     }
     
     /**
+     * Determine if a given string is an alias.
+     *
+     * @param  string  $name
+     * @return bool
+     */
+    private function isAlias($name)
+    {
+        return isset($this->aliases[$name]);
+    }
+    
+    /**
      * Get the alias for an abstract if available.
      *
      * @param  string  $abstract
@@ -603,7 +603,7 @@ class ServiceContainer implements ServiceContainerContract
      *
      * @throws \LogicException
      */
-    public function getAlias($abstract)
+    private function getAlias($abstract)
     {
         if (! isset($this->aliases[$abstract])) {
             return $abstract;
@@ -622,7 +622,7 @@ class ServiceContainer implements ServiceContainerContract
      * @param  string  $abstract
      * @return void
      */
-    protected function dropStaleInstances($abstract)
+    private function dropStaleInstances($abstract)
     {
         unset($this->instances[$abstract], $this->aliases[$abstract]);
     }
