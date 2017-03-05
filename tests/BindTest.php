@@ -21,19 +21,16 @@ class BindTest extends TestCase
     public function it_should_bind_and_resolve_services()
     {
         $this->assertFalse($this->container->isBound('now'));
-        $this->assertFalse($this->container->isResolved('now'));
         
         $this->container->bind('now', function () {
             return new DateTime();
         });
     
         $this->assertTrue($this->container->isBound('now'));
-        $this->assertFalse($this->container->isResolved('now'));
         
         $now = $this->container->resolve('now');
     
         $this->assertTrue($this->container->isBound('now'));
-        $this->assertTrue($this->container->isResolved('now'));
         
         $this->assertTrue($now instanceof DateTime);
     }

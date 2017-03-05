@@ -20,12 +20,10 @@ class SetAndGetTest extends TestCase
     public function it_should_set_services()
     {
         $this->assertFalse($this->container->isBound('test'));
-        $this->assertFalse($this->container->isResolved('test'));
         
         $this->container->instance('test', $this);
     
         $this->assertTrue($this->container->isBound('test'));
-        $this->assertTrue($this->container->isResolved('test'));
     }
     
     /**

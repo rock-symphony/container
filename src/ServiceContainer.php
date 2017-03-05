@@ -69,21 +69,6 @@ class ServiceContainer implements ServiceContainerContract
     }
     
     /**
-     * Determine if the given abstract type has been resolved.
-     *
-     * @param  string  $abstract
-     * @return bool
-     */
-    public function isResolved($abstract)
-    {
-        if ($this->isAlias($abstract)) {
-            $abstract = $this->getAlias($abstract);
-        }
-        
-        return isset($this->resolved[$abstract]) || isset($this->instances[$abstract]);
-    }
-    
-    /**
      * Determine if a given string is an alias.
      *
      * @param  string  $name
