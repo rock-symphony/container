@@ -333,7 +333,7 @@ class ServiceContainer implements ServiceContainerContract
         // the binding. This will instantiate the types, as well as resolve any of
         // its "nested" dependencies recursively until all have gotten resolved.
         if ($concrete === $abstract) {
-            $object = $this->instantiate($concrete, $parameters);
+            $object = $this->construct($concrete, $parameters);
         
         } elseif ($concrete instanceof Closure) {
             $object = $concrete($this, $parameters);
@@ -403,7 +403,7 @@ class ServiceContainer implements ServiceContainerContract
      *
      * @throws \RockSymfony\ServiceContainer\Exceptions\BindingResolutionException
      */
-    public function instantiate($concrete, array $parameters = [])
+    public function construct($concrete, array $parameters = [])
     {
         try {
             $reflector = new ReflectionClass($concrete);

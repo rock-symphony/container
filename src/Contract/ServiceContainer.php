@@ -73,7 +73,7 @@ interface ServiceContainer extends PsrContainerInterface
      *
      * @return mixed
      */
-    public function instantiate($class, array $parameters = []);
+    public function construct($class, array $parameters = []);
     
     /**
      * Resolves an abstract dependency from container or instantiate a new instance of given class.

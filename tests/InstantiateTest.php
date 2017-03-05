@@ -22,7 +22,7 @@ class InstantiateTest extends TestCase
      */
     public function it_should_instantiate_new_instances()
     {
-        $stdClass = $this->container->instantiate('stdClass');
+        $stdClass = $this->container->construct('stdClass');
         $this->assertTrue($stdClass instanceof \stdClass);
     }
     
@@ -32,7 +32,7 @@ class InstantiateTest extends TestCase
     public function it_should_instantiate_new_instances_using_in_default_constructor_parameters()
     {
         /** @var DummyCounter $counter */
-        $counter = $this->container->instantiate(DummyCounter::CLASS_NAME);
+        $counter = $this->container->construct(DummyCounter::CLASS_NAME);
         
         $this->assertTrue($counter instanceof DummyCounter);
         $this->assertEquals(0, $counter->start);
@@ -45,13 +45,13 @@ class InstantiateTest extends TestCase
     public function it_should_instantiate_new_instances_with_a_subset_of_parameters_passed()
     {
         /** @var DummyCounter $counter */
-        $counter = $this->container->instantiate(DummyCounter::CLASS_NAME, ['step' => 25]);
+        $counter = $this->container->construct(DummyCounter::CLASS_NAME, ['step' => 25]);
         $this->assertTrue($counter instanceof DummyCounter);
         $this->assertEquals(0, $counter->start);
         $this->assertEquals(25, $counter->step);
     
         /** @var DummyCounter $counter2 */
-        $counter2 = $this->container->instantiate(DummyCounter::CLASS_NAME, ['start' => 10]);
+        $counter2 = $this->container->construct(DummyCounter::CLASS_NAME, ['start' => 10]);
         $this->assertTrue($counter2 instanceof DummyCounter);
         $this->assertEquals(10, $counter2->start);
         $this->assertEquals(1, $counter2->step);
@@ -65,7 +65,7 @@ class InstantiateTest extends TestCase
     public function it_should_instantiate_new_instances_with_numeric_array()
     {
         /** @var DummyCounter $counter */
-        $counter = $this->container->instantiate(DummyCounter::CLASS_NAME, [ /* start = */ 5, /* step = */ 10]);
+        $counter = $this->container->construct(DummyCounter::CLASS_NAME, [ /* start = */ 5, /* step = */ 10]);
         $this->assertTrue($counter instanceof DummyCounter);
         $this->assertEquals(5, $counter->start);
         $this->assertEquals(10, $counter->step);
@@ -77,7 +77,7 @@ class InstantiateTest extends TestCase
     public function it_should_fail_if_a_required_not_hinted_parameter_is_not_specified()
     {
         $this->setExpectedException('RockSymfony\ServiceContainer\Exceptions\BindingResolutionException');
-        $this->container->instantiate(DummyFilesystem::CLASS_NAME);
+        $this->container->construct(DummyFilesystem::CLASS_NAME);
     }
     
     /**
@@ -86,7 +86,7 @@ class InstantiateTest extends TestCase
     public function it_should_recursively_resolve_dependencies_and_fail_if_it_is_not_possible()
     {
         $this->setExpectedException('RockSymfony\ServiceContainer\Exceptions\BindingResolutionException');
-        $this->container->instantiate(DummyCache::CLASS_NAME);
+        $this->container->construct(DummyCache::CLASS_NAME);
     }
     
     /**
@@ -101,7 +101,7 @@ class InstantiateTest extends TestCase
         });
         
         /** @var DummyCache $cache */
-        $cache = $this->container->instantiate(DummyCache::CLASS_NAME, ['options' => ['ttl' => '1 year']]);
+        $cache = $this->container->construct(DummyCache::CLASS_NAME, ['options' => ['ttl' => '1 year']]);
         $this->assertTrue($cache instanceof DummyCache);
         $this->assertTrue($cache->filesystem instanceof DummyFilesystem);
         $this->assertTrue($is_bind_resolution_called);
