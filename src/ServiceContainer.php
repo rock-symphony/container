@@ -330,18 +330,18 @@ class ServiceContainer implements ServiceContainerContract
         if (isset($this->instances[$abstract])) {
             return $this->instances[$abstract];
         }
-        
+    
         $concrete = $this->getConcrete($abstract);
-        
+    
         // We're ready to instantiate an instance of the concrete type registered for
         // the binding. This will instantiate the types, as well as resolve any of
         // its "nested" dependencies recursively until all have gotten resolved.
         if ($concrete === $abstract) {
             $object = $this->instantiate($concrete, $parameters);
-            
+        
         } elseif ($concrete instanceof Closure) {
             $object = $concrete($this, $parameters);
-            
+        
         } else {
             $object = $this->resolve($concrete, $parameters);
         }
@@ -368,8 +368,8 @@ class ServiceContainer implements ServiceContainerContract
     /**
      * Get the concrete type for a given abstract.
      *
-     * @param  string  $abstract
-     * @return mixed   $concrete
+     * @param  string $abstract
+     * @return string|Closure $concrete
      */
     protected function getConcrete($abstract)
     {
@@ -380,7 +380,7 @@ class ServiceContainer implements ServiceContainerContract
             return $abstract;
         }
         
-        return $this->bindings[$abstract]['concrete'];
+        return $this->bindings[$abstract]['resolver'];
     }
     
     /**
