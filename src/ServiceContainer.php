@@ -115,37 +115,6 @@ class ServiceContainer implements ServiceContainerContract
     }
     
     /**
-     * Get the Closure to be used when building a type.
-     *
-     * @param  string  $abstract
-     * @param  string  $concrete
-     * @return \Closure
-     */
-    protected function getClosure($abstract, $concrete)
-    {
-        return function ($container, $parameters = []) use ($abstract, $concrete) {
-            $method = ($abstract == $concrete) ? 'build' : 'make';
-            
-            return $container->$method($concrete, $parameters);
-        };
-    }
-    
-    /**
-     * Register a binding if it hasn't already been registered.
-     *
-     * @param  string  $abstract
-     * @param  \Closure|string|null  $concrete
-     * @param  bool  $shared
-     * @return void
-     */
-    public function bindIf($abstract, $concrete = null, $shared = false)
-    {
-        if (! $this->isBound($abstract)) {
-            $this->bind($abstract, $concrete, $shared);
-        }
-    }
-    
-    /**
      * Register a shared binding in the container.
      *
      * @param  string|array  $abstract
@@ -155,28 +124,6 @@ class ServiceContainer implements ServiceContainerContract
     public function singleton($abstract, $concrete = null)
     {
         $this->bind($abstract, $concrete, true);
-    }
-    
-    /**
-     * Wrap a Closure such that it is shared.
-     *
-     * @param  \Closure  $closure
-     * @return \Closure
-     */
-    public function share(Closure $closure)
-    {
-        return function ($container) use ($closure) {
-            // We'll simply declare a static variable within the Closures and if it has
-            // not been set we will execute the given Closures to resolve this value
-            // and return it back to these consumers of the method as an instance.
-            static $object;
-            
-            if (is_null($object)) {
-                $object = $closure($container);
-            }
-            
-            return $object;
-        };
     }
     
     /**
@@ -610,28 +557,6 @@ class ServiceContainer implements ServiceContainerContract
         return $parameters;
     }
     
-    /**
-     * Get the type hint for this closure's first argument.
-     *
-     * @param  \Closure  $callback
-     * @return string|null
-     */
-    protected function getFunctionHint(Closure $callback)
-    {
-        $function = new ReflectionFunction($callback);
-        
-        if ($function->getNumberOfParameters() == 0) {
-            return null;
-        }
-        
-        $expected = $function->getParameters()[0];
-        
-        if (! $expected->getClass()) {
-            return null;
-        }
-        
-        return $expected->getClass()->name;
-    }
     
     /**
      * Determine if a given type is shared.
@@ -674,16 +599,6 @@ class ServiceContainer implements ServiceContainerContract
     }
     
     /**
-     * Get the container's bindings.
-     *
-     * @return array
-     */
-    public function getBindings()
-    {
-        return $this->bindings;
-    }
-    
-    /**
      * Drop all of the stale instances and aliases.
      *
      * @param  string  $abstract
@@ -693,41 +608,7 @@ class ServiceContainer implements ServiceContainerContract
     {
         unset($this->instances[$abstract], $this->aliases[$abstract]);
     }
-    
-    /**
-     * Remove a resolved instance from the instance cache.
-     *
-     * @param  string  $abstract
-     * @return void
-     */
-    public function forgetInstance($abstract)
-    {
-        unset($this->instances[$abstract]);
-    }
-    
-    /**
-     * Clear all of the instances from the container.
-     *
-     * @return void
-     */
-    public function forgetInstances()
-    {
-        $this->instances = [];
-    }
-    
-    /**
-     * Flush the container of all bindings and resolved instances.
-     *
-     * @return void
-     */
-    public function flush()
-    {
-        $this->aliases = [];
-        $this->resolved = [];
-        $this->bindings = [];
-        $this->instances = [];
-    }
-    
+
     /**
      * Finds an entry of the container by its identifier and returns it.
      *
