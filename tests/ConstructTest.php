@@ -7,7 +7,7 @@ use RockSymfony\ServiceContainer\Tests\Support\DummyCache;
 use RockSymfony\ServiceContainer\Tests\Support\DummyCounter;
 use RockSymfony\ServiceContainer\Tests\Support\DummyFilesystem;
 
-class InstantiateTest extends TestCase
+class ConstructTest extends TestCase
 {
     /** @var ServiceContainer */
     private $container;
