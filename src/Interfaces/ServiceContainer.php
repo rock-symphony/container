@@ -1,5 +1,5 @@
 <?php
-namespace RockSymfony\ServiceContainer\Contract;
+namespace RockSymfony\ServiceContainer\Interfaces;
 
 use Closure;
 use Psr\Container\ContainerInterface as PsrContainerInterface;
@@ -62,28 +62,4 @@ interface ServiceContainer extends PsrContainerInterface
      * @return void
      */
     public function alias($id, $alias);
-    
-    /**
-     * Creates an instance of any class resolving dependencies recursively.
-     *
-     * @param string $class
-     * @param array  $parameters
-     *
-     * @throws \RockSymfony\ServiceContainer\Exceptions\BindingResolutionException Error while resolving dependencies.
-     *
-     * @return mixed
-     */
-    public function construct($class, array $parameters = []);
-    
-    /**
-     * Resolves an abstract dependency from container or instantiate a new instance of given class.
-     *
-     * @param string $abstract
-     *
-     * @throws \RockSymfony\ServiceContainer\Exceptions\BindingNotFoundException   Error while resolving dependencies.
-     * @throws \RockSymfony\ServiceContainer\Exceptions\BindingResolutionException Error while resolving dependencies.
-     *
-     * @return mixed Resolved concrete implementation of an abstract or a bound named service
-     */
-    public function resolve($abstract);
 }

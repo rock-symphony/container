@@ -9,11 +9,11 @@ use ReflectionMethod;
 use ReflectionFunction;
 use ReflectionParameter;
 use InvalidArgumentException;
+use RockSymfony\ServiceContainer\Interfaces\DependencyInjectingServiceContainer;
 use RockSymfony\ServiceContainer\Exceptions\BindingNotFoundException;
 use RockSymfony\ServiceContainer\Exceptions\BindingResolutionException;
-use RockSymfony\ServiceContainer\Contract\ServiceContainer as ServiceContainerContract;
 
-class ServiceContainer implements ServiceContainerContract
+class ServiceContainer implements DependencyInjectingServiceContainer
 {
     /**
      * An array of the types that have been resolved.
