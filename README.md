@@ -16,6 +16,148 @@ An indie Service Container implementation based on Laravel Container.
 - Dependency-resolving constructor calls
 - Dependency-resolving method calls
 
+Usage
+-----
+
+### Basics
+
+Of course you can put services to container (`->set()`) and get them from it (`->get()`), 
+as well as check if container has specific service (`->has()`).
+
+```php
+<?php
+
+use RockSymfony\ServiceContainer\ServiceContainer;
+
+$container = new ServiceContainer();
+
+// Definition:
+// Set a service instance to container
+$container->set('acme', new AcmeService());
+
+// Consumer:
+// Check if there is a service binding for given service ID  
+echo $container->has('acme') ? 'It has acme service' : 'wtf?';
+
+// Get a service from container
+$acme = $container->get('acme');
+$acme->doSomeStuff();
+```
+
+
+
+### Using abstract interfaces
+
+It's handy to bind services by their abstract interfaces 
+to explicitly declare it's interface on both definition and consumer sides.
+ 
+```php
+<?php
+/** @var $container \RockSymfony\ServiceContainer\ServiceContainer */
+// Definition:
+// Note we bind instance by it's **abstract** interface.
+// This way you force consumers to not care about implementation details, but rely on interface. 
+$container->set(\Psr\Log\LoggerInterface::class, $my_fancy_psr_logger_implementation);
+
+// Consumer:
+// Then you have a consumer that needs a logger implementation,
+// but doesn't care on details. It can use any PSR-compatible logger.
+$logger = $container->get(\Psr\Log\LoggerInterface::class);
+$logger->info('Nice!');
+```
+
+
+
+### Aliases
+
+Sometimes you may also want to bind the same service by different IDs.
+You can use aliases for that (`->alias()`):
+
+```php
+<?php
+/** @var $container \RockSymfony\ServiceContainer\ServiceContainer */
+// Definition:
+$container->alias('logger', \Psr\Log\LoggerInterface::class);
+
+// Consumer:
+$logger = $container->get(\Psr\Log\LoggerInterface::class);
+// ... or 
+$logger = $container->get('logger'); // 100% equivalent
+$logger->info('Nice!');
+```
+
+
+
+### Binding with resolver function 
+
+You can declare a service by providing a resolver closure function (`->bind()`).
+Service container will call that function every time you resolve service.
+
+```php
+<?php
+/** @var $container \RockSymfony\ServiceContainer\ServiceContainer */
+// Definition:
+$container->bind('now', function () {
+    return new DateTime();
+});
+
+// Consumer:
+$now = $container->get('now'); // DateTime object
+$another_now = $container->get('now'); // another DateTime object
+
+echo $now === $another_now ? 'true' : 'false'; // == false
+```
+
+
+
+### Deferred service binding 
+
+You can defer service initialization until it is requested for the first time.
+A resolver function will be called just once and its result will be stored to service container.
+
+```php
+<?php
+/** @var $container \RockSymfony\ServiceContainer\ServiceContainer */
+// Definition:
+$container->bind('cache', function () {
+    return new MemcacheCache('127.0.0.1');
+}, true); // <--- not this `true`
+
+// Consumer:
+$cache = $container->get('cache'); // DateTime object
+// do something with $cache
+```
+
+
+
+### Extending a bound service 
+
+You can extend/decorate an existing service binding with `->extend()` method.
+
+```php
+<?php
+use RockSymfony\ServiceContainer\ServiceContainer;
+
+/** @var $container ServiceContainer */
+// Definition:
+$container->bind('cache', function () {
+    return new MemcacheCache('127.0.0.1');
+}, true); // <--- not this `true`
+
+// Wrap cache service with logging decorator
+$container->extend('cache', function($cache, ServiceContainer $container) { 
+    // Note: it's passing a service container instance as second parameter
+    //       so you can get dependencies from it.
+    return new LoggingCacheDecorator($cache, $container->get('logger'));
+});
+
+// Consumer:
+$cache = $container->get('cache'); // DateTime object
+// Uses cache seamlessly as before
+// (implying that MemcacheCache and LoggingCacheDecorator have the same interface)
+```
+
+
 FAQ
 ---
 
