@@ -156,20 +156,6 @@ class ServiceContainer implements DependencyInjectingServiceContainer
     }
     
     /**
-     * Wrap the given closure such that its dependencies will be injected when executed.
-     *
-     * @param  \Closure  $callback
-     * @param  array  $parameters
-     * @return \Closure
-     */
-    public function wrap(Closure $callback, array $parameters = [])
-    {
-        return function () use ($callback, $parameters) {
-            return $this->call($callback, $parameters);
-        };
-    }
-    
-    /**
      * Call the given Closure / class@method and inject its dependencies.
      *
      * @param  callable|string  $callback
@@ -282,20 +268,6 @@ class ServiceContainer implements DependencyInjectingServiceContainer
         }
         
         return $this->call([$this->resolve($segments[0]), $method], $parameters);
-    }
-    
-    /**
-     * Get a closure to resolve the given type from the container.
-     *
-     * @param  string  $abstract
-     * @param  array  $defaults
-     * @return \Closure
-     */
-    public function factory($abstract, array $defaults = [])
-    {
-        return function (array $params = []) use ($abstract, $defaults) {
-            return $this->resolve($abstract, $params + $defaults);
-        };
     }
     
     /**
