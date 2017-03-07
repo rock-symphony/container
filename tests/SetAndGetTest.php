@@ -21,7 +21,7 @@ class SetAndGetTest extends TestCase
     {
         $this->assertFalse($this->container->has('test'));
         
-        $this->container->instance('test', $this);
+        $this->container->set('test', $this);
     
         $this->assertTrue($this->container->has('test'));
     }
@@ -32,7 +32,7 @@ class SetAndGetTest extends TestCase
      */
     public function it_should_get_services()
     {
-        $this->container->instance('test', $this);
+        $this->container->set('test', $this);
         
         $test = $this->container->resolve('test');
     

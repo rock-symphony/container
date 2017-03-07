@@ -92,14 +92,17 @@ class ServiceContainer implements DependencyInjectingServiceContainer
     }
     
     /**
-     * Sets an entry of the container by its identifier.
+     * Register an existing instance as shared in the container.
      *
-     * @param string $id       Identifier of the entry to look for.
-     * @param mixed  $instance Entry
+     * @param  string  $abstract
+     * @param  mixed   $instance
+     * @return void
      */
-    public function set($id, $instance)
+    public function set($abstract, $instance)
     {
-        $this->instance($id, $instance);
+        unset($this->aliases[$abstract]);
+        
+        $this->instances[$abstract] = $instance;
     }
     
     /**
@@ -138,20 +141,6 @@ class ServiceContainer implements DependencyInjectingServiceContainer
         } else {
             $this->extenders[$abstract][] = $closure;
         }
-    }
-    
-    /**
-     * Register an existing instance as shared in the container.
-     *
-     * @param  string  $abstract
-     * @param  mixed   $instance
-     * @return void
-     */
-    public function instance($abstract, $instance)
-    {
-        unset($this->aliases[$abstract]);
-        
-        $this->instances[$abstract] = $instance;
     }
     
     /**
