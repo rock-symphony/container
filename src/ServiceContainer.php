@@ -2,6 +2,7 @@
 namespace RockSymfony\ServiceContainer;
 
 use Closure;
+use Exception;
 use LogicException;
 use ReflectionClass;
 use ReflectionException;
@@ -192,7 +193,12 @@ class ServiceContainer implements DependencyInjectingServiceContainer
         
         $dependencies = $this->getMethodDependencies($callback, $parameters);
         
-        return call_user_func_array($callback, $dependencies);
+        try {
+            return call_user_func_array($callback, $dependencies);
+        } catch (Exception $e) {
+            // wrap extension with ServiceContainer exception
+            throw new BindingResolutionException($e->getMessage(), $e->getCode(), $e);
+        }
     }
     
     /**
