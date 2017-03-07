@@ -5,6 +5,9 @@ use DateTime;
 use PHPUnit\Framework\TestCase;
 use RockSymfony\ServiceContainer\ServiceContainer;
 
+/**
+ * @see ServiceContainer::deferred()
+ */
 class DeferredTest extends TestCase
 {
     /** @var ServiceContainer */

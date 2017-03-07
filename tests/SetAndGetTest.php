@@ -4,6 +4,11 @@ namespace RockSymfony\ServiceContainer\Tests;
 use PHPUnit\Framework\TestCase;
 use RockSymfony\ServiceContainer\ServiceContainer;
 
+/**
+ * @see ServiceContainer::set()
+ * @see ServiceContainer::get()
+ * @see ServiceContainer::has()
+ */
 class SetAndGetTest extends TestCase
 {
     /** @var ServiceContainer */

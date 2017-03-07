@@ -6,6 +6,9 @@ use RockSymfony\ServiceContainer\ServiceContainer;
 use RockSymfony\ServiceContainer\Tests\Support\DummyFilesystem;
 use RockSymfony\ServiceContainer\Tests\Support\DummyFilesystemDecorator;
 
+/**
+ * @see ServiceContainer::extend()
+ */
 class ExtendTest extends TestCase
 {
     /** @var ServiceContainer */
