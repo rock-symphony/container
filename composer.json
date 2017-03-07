@@ -5,7 +5,11 @@
 
     "autoload": {
         "psr-4": {
-            "RockSymfony\\ServiceContainer\\": "src/",
+            "RockSymfony\\ServiceContainer\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
             "RockSymfony\\ServiceContainer\\Tests\\": "tests/"
         }
     },
