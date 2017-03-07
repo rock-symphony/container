@@ -43,16 +43,35 @@ interface ServiceContainer extends PsrContainerInterface
     public function set($id, $instance);
     
     /**
-     * Sets an entry resolver closure function.
+     * Binds an entry resolver closure function.
      *
-     * If $shared is true, resolution result will be stored for all future gets/resolutions.
+     * The closure function will be called every
+     * time you resolve then given service ID.
+     * Its result will be returned as resolved service instance.
+     *
+     * @see deferred()
      *
      * @param string  $id       Service identifier or FQCN
      * @param Closure $resolver Resolver closure function which result will be used as resolved instance
-     * @param bool    $shared   Reuse resolution result for future requests of same $id
      * @return void
      */
-    public function bind($id, Closure $resolver, $shared = false);
+    public function resolver($id, Closure $resolver);
+    
+    /**
+     * Sets an deferred service resolution function.
+     *
+     * The closure function will be called just once.
+     * Its result will be stored inside service container
+     * and returned for all future resolutions of the service ID.
+     *
+     * Works similar as `->resolver()`, but stores result for future resolutions.
+     * @see resolver()
+     *
+     * @param string  $id       Service identifier or FQCN
+     * @param Closure $resolver Resolver closure function which result will be used as resolved instance
+     * @return void
+     */
+    public function deferred($id, Closure $resolver);
     
     /**
      * Makes the same binding/entry be available by another name.

@@ -5,7 +5,7 @@ use DateTime;
 use PHPUnit\Framework\TestCase;
 use RockSymfony\ServiceContainer\ServiceContainer;
 
-class BindTest extends TestCase
+class ResolverTest extends TestCase
 {
     /** @var ServiceContainer */
     private $container;
@@ -18,11 +18,11 @@ class BindTest extends TestCase
     /**
      * @test
      */
-    public function it_should_bind_and_resolve_services()
+    public function it_should_resolve_services_bound_to_resolver_function()
     {
         $this->assertFalse($this->container->has('now'));
         
-        $this->container->bind('now', function () {
+        $this->container->resolver('now', function () {
             return new DateTime();
         });
     
@@ -30,42 +30,31 @@ class BindTest extends TestCase
         
         $now = $this->container->resolve('now');
     
-        $this->assertTrue($this->container->has('now'));
-        
         $this->assertTrue($now instanceof DateTime);
     }
     
     /**
      * @test
      */
-    public function it_should_not_share_services_by_default()
+    public function it_should_call_resolver_function_every_time_you_resolve_a_service()
     {
         $this->assertFalse($this->container->has('now'));
-        
-        $this->container->bind('now', function () {
+    
+        $resolved_count = 0;
+    
+        $this->container->resolver('now', function () use (& $resolved_count) {
+            $resolved_count++;
             return new DateTime();
         });
+    
+        $this->assertTrue($this->container->has('now'));
+        $this->assertEquals(0, $resolved_count);
         
         $now = $this->container->resolve('now');
         $another_now = $this->container->resolve('now');
         
         self::assertNotSame($now, $another_now);
-    }
-    
-    /**
-     * @test
-     */
-    public function it_should_share_services_if_asked()
-    {
-        $this->assertFalse($this->container->has('now'));
         
-        $this->container->bind('now', function () {
-            return new DateTime();
-        }, $shared = true);
-        
-        $now = $this->container->resolve('now');
-        $another_now = $this->container->resolve('now');
-        
-        self::assertSame($now, $another_now);
+        $this->assertEquals(2, $resolved_count);
     }
 }

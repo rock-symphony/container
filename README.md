@@ -88,16 +88,16 @@ $logger->info('Nice!');
 
 
 
-### Binding with resolver function 
+### Binding to a resolver function 
 
-You can declare a service by providing a resolver closure function (`->bind()`).
+You can declare a service by providing a resolver closure function (`->resolver()`).
 Service container will call that function every time you resolve service.
 
 ```php
 <?php
 /** @var $container \RockSymfony\ServiceContainer\ServiceContainer */
 // Definition:
-$container->bind('now', function () {
+$container->resolver('now', function () {
     return new DateTime();
 });
 
@@ -110,18 +110,20 @@ echo $now === $another_now ? 'true' : 'false'; // == false
 
 
 
-### Deferred service binding 
+### Deferred resolution service binding  
 
 You can defer service initialization until it is requested for the first time.
 A resolver function will be called just once and its result will be stored to service container.
+
+It works similar to `->bind()`, but stores result after first invocation.
 
 ```php
 <?php
 /** @var $container \RockSymfony\ServiceContainer\ServiceContainer */
 // Definition:
-$container->bind('cache', function () {
+$container->deferred('cache', function () {
     return new MemcacheCache('127.0.0.1');
-}, true); // <--- not this `true`
+});
 
 // Consumer:
 $cache = $container->get('cache'); // DateTime object
@@ -140,9 +142,9 @@ use RockSymfony\ServiceContainer\ServiceContainer;
 
 /** @var $container ServiceContainer */
 // Definition:
-$container->bind('cache', function () {
+$container->deferred('cache', function () {
     return new MemcacheCache('127.0.0.1');
-}, true); // <--- not this `true`
+}); 
 
 // Wrap cache service with logging decorator
 $container->extend('cache', function($cache, ServiceContainer $container) { 
@@ -170,7 +172,7 @@ FAQ
   > - It's designed to be used as part of Laravel Framework, thus it's almost unusable as-a-library
   > - You can use all laravel components only at certain version (i.e. all at 5.3; or all at 5.4; but not mixing)
   > - If you want to move forward you are forced to upgrade to latest PHP version (i.e. container 5.4 requires PHP 7.0)
-  > - Bloated public API: 31 public API methods (vs 9 public methods in this library) 
+  > - Bloated public API: 31 public API methods (vs 10 public methods in this library) 
   > - Questionable method naming: what's the difference between `->make()` and `->build()`? 
 
 [laravel-container]: https://laravel.com/docs/5.3/container

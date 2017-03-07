@@ -108,21 +108,42 @@ class ServiceContainer implements DependencyInjectingServiceContainer
     /**
      * Sets an entry resolver closure function.
      *
-     * If $shared is true, resolution result will be stored for all future gets/resolutions.
+     * The closure function will be called every
+     * time you resolve then given service ID.
+     * Its result will be returned as resolved service instance.
+     *
+     * @see deferred()
      *
      * @param string  $id       Service identifier or FQCN
      * @param Closure $resolver Resolver closure function which result will be used as resolved instance
-     * @param bool    $shared   Reuse resolution result for future requests of same $id
      * @return void
      */
-    public function bind($id, Closure $resolver, $shared = false)
+    public function resolver($id, Closure $resolver)
     {
-        // If no concrete type was given, we will simply set the concrete type to the
-        // abstract type. After that, the concrete type to be registered as shared
-        // without being forced to state their classes in both of the parameters.
         $this->dropStaleInstances($id);
         
-        $this->bindings[$id] = ['resolver' => $resolver, 'shared' => $shared];
+        $this->bindings[$id] = ['resolver' => $resolver, 'shared' => false];
+    }
+    
+    /**
+     * Sets an deferred service resolution function.
+     *
+     * The closure function will be called just once.
+     * Its result will be stored inside service container
+     * and returned for all future resolutions of the service ID.
+     *
+     * Works similar as `->resolver()`, but stores result for future resolutions.
+     * @see resolver()
+     *
+     * @param string  $id       Service identifier or FQCN
+     * @param Closure $resolver Resolver closure function which result will be used as resolved instance
+     * @return void
+     */
+    public function deferred($id, Closure $resolver)
+    {
+        $this->dropStaleInstances($id);
+        
+        $this->bindings[$id] = ['resolver' => $resolver, 'shared' => true];
     }
     
     /**

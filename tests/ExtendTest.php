@@ -62,7 +62,7 @@ class ExtendTest extends TestCase
     
         $resolved_counter = 0;
         
-        $this->container->bind('fs', function () use (& $resolved_counter) {
+        $this->container->resolver('fs', function () use (& $resolved_counter) {
             $resolved_counter++;
             return new DummyFilesystem('/tmp');
         });
@@ -111,10 +111,10 @@ class ExtendTest extends TestCase
     
         $resolved_counter = 0;
         
-        $this->container->bind('fs', function () use (& $resolved_counter) {
+        $this->container->deferred('fs', function () use (& $resolved_counter) {
             $resolved_counter++;
             return new DummyFilesystem('/tmp');
-        }, $shared = true);
+        });
     
         $this->assertTrue($this->container->has('fs'), 'Container should have "fs" bound service now');
         $this->assertEquals(0, $resolved_counter, 'Container should not resolve "fs" yet');
