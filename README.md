@@ -253,7 +253,7 @@ FAQ
   > But it's a bad candidate to link it as library as:
   > 
   > - It doesn't follow SemVer &ndash; BC breaks on every minor version bump 
-  > - It has unneeded dependency to flooded (illuminate/contracts)[laravel-contracts]
+  > - It has unneeded dependency to flooded [illuminate/contracts](laravel-contracts)
   > - It's designed to be used as part of Laravel Framework, thus it's almost unusable as-a-library
   > - You can use all laravel components only at certain version (i.e. all at 5.3; or all at 5.4; but not mixing)
   > - If you want to move forward you are forced to upgrade to latest PHP version (i.e. container 5.4 requires PHP 7.0)
