@@ -248,6 +248,7 @@ FAQ
 ---
 
 1. Why not use [Laravel Container](laravel-container)?
+
   > We were using Laravel Container for our project internally. 
   > But it's a bad candidate to link it as library as:
   > 
