@@ -1,4 +1,16 @@
 {
+    "name": "rocksymfony/container",
+    "description": "An indie Service Container implementation based on Laravel Container",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Ivan Voskoboinyk",
+            "email": "ivan.voskoboinyk@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+
     "require": {
         "psr/container": "^1.0"
     },
