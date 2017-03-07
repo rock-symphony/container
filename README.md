@@ -13,8 +13,8 @@ An indie Service Container implementation based on Laravel Container.
 ### Features
 
 - Automatic dependencies resolution
-- Dependency-resolving constructor calls
-- Dependency-resolving method calls
+- Dependency-injecting constructor calls
+- Dependency-injecting method calls
 
 Usage
 -----
@@ -160,6 +160,90 @@ $cache = $container->get('cache'); // DateTime object
 ```
 
 
+
+### Automatic dependency injection 
+
+#### Dependency-injecting construction
+
+You can construct any class instance automatically injecting class-hinted dependencies from service container. 
+It will try to resolve dependencies from container or construct them recursively resolving their dependencies.
+
+```php
+<?php
+
+// Class we need to inject dependencies into
+class LoggingCacheDecorator {
+    public function __construct(CacheInterface $cache, LoggerInterface $logger, array $options = []) {
+        // initialize
+    }
+}
+
+/** @var $container RockSymfony\ServiceContainer\ServiceContainer */
+// Definition:
+$container->set(LoggerInterface::class, $logger);
+$container->set(CacheInterface::class, $cache);
+
+
+// Consumer:
+$logging_cache = $container->construct(LoggingCacheDecorator::class);
+// you can also provide constructor arguments with second parameter:
+$logging_cache = $container->construct(LoggingCacheDecorator::class, ['options' => ['level' => 'debug']]);
+```
+
+
+#### Dependency-injecting method call
+
+You can call *any [callable](php-callable)* automatically injecting dependencies from service container.
+It's primarily intended, but not limited, to call application HTTP controllers. 
+
+```php
+<?php
+/** @var $container RockSymfony\ServiceContainer\ServiceContainer */
+
+class MyController {
+    public function showPost($url, PostsRepository $posts, TemplateEngine $templates)
+    {
+        // Warning! Pseudo-code :)
+        $post = $posts->findPostByUrl($url);
+        return $templates->render('post.html', ['post' => $post]); 
+    }
+    
+    public static function error404(TemplateEngine $templates)
+    {
+        return $templates->render('404.html');
+    }
+}
+// 1) It can auto-inject dependencies into instance method callables.
+//    In this case it will check container for PostsRepository and TemplateEngine bindings.
+//    Or try to create those instances automatically.
+//    Or throw an exception if both options are not possible.
+$container->call([$container, 'showPost'], ['url' => '/hello-world']);
+
+// 2) It can construct class and auto-inject dependencies into method call:
+//    Here it will first construct a new instance of MyController (see `->construct()`)
+//    And then follows the same logic as the call 1) above.
+$container->call('MyController@showPost', ['url' => '/hello-world']); 
+// ... or the same: 
+$container->call('MyController', ['url' => '/hello-world'], 'showPost');
+
+// 3) It can auto-inject dependencies into static method call: 
+$container->call(['MyController', 'error404']);
+// ... or the same:
+$container->call('MyController::error404');
+
+// 4) It can auto-inject dependencies into closure function calls  
+$container->call(function (PostsRepository $repository) {
+    $repository->erase();
+});
+
+```
+ 
+**Note:** Service container only resolves class-hinted arguments (i.e. arguments explicitly type-hinted to a class).
+          You should provide required scalar arguments with second argument.
+          It will use default value for options arguments (if you don't specify them). 
+
+
+
 FAQ
 ---
 
@@ -178,3 +262,4 @@ FAQ
 [laravel-container]: https://laravel.com/docs/5.3/container
 [laravel-contracts]: https://github.com/illuminate/contracts
 [psr-11]: https://github.com/container-interop/fig-standards/blob/master/proposed/container.md
+[php-callable]: http://php.net/manual/en/language.types.callable.php
