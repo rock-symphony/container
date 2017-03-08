@@ -6,9 +6,9 @@ use PHPUnit\Framework\TestCase;
 use RockSymfony\ServiceContainer\ServiceContainer;
 
 /**
- * @see ServiceContainer::resolver()
+ * @see ServiceContainer::bindResolver()
  */
-class ResolverTest extends TestCase
+class BindResolverTest extends TestCase
 {
     /** @var ServiceContainer */
     private $container;
@@ -25,7 +25,7 @@ class ResolverTest extends TestCase
     {
         $this->assertFalse($this->container->has('now'));
         
-        $this->container->resolver('now', function () {
+        $this->container->bindResolver('now', function () {
             return new DateTime();
         });
     
@@ -45,7 +45,7 @@ class ResolverTest extends TestCase
     
         $resolved_count = 0;
     
-        $this->container->resolver('now', function () use (& $resolved_count) {
+        $this->container->bindResolver('now', function () use (& $resolved_count) {
             $resolved_count++;
             return new DateTime();
         });

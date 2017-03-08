@@ -49,13 +49,13 @@ interface ServiceContainer extends PsrContainerInterface
      * time you resolve then given service ID.
      * Its result will be returned as resolved service instance.
      *
-     * @see deferred()
+     * @see bindSingletonResolver()
      *
      * @param string  $id       Service identifier or FQCN
      * @param Closure $resolver Resolver closure function which result will be used as resolved instance
      * @return void
      */
-    public function resolver($id, Closure $resolver);
+    public function bindResolver($id, Closure $resolver);
     
     /**
      * Sets an deferred service resolution function.
@@ -65,13 +65,13 @@ interface ServiceContainer extends PsrContainerInterface
      * and returned for all future resolutions of the service ID.
      *
      * Works similar as `->resolver()`, but stores result for future resolutions.
-     * @see resolver()
+     * @see bindResolver()
      *
      * @param string  $id       Service identifier or FQCN
      * @param Closure $resolver Resolver closure function which result will be used as resolved instance
      * @return void
      */
-    public function deferred($id, Closure $resolver);
+    public function bindSingletonResolver($id, Closure $resolver);
     
     /**
      * Makes the same binding/entry be available by another name.

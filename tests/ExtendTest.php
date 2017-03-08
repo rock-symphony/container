@@ -65,7 +65,7 @@ class ExtendTest extends TestCase
     
         $resolved_counter = 0;
         
-        $this->container->resolver('fs', function () use (& $resolved_counter) {
+        $this->container->bindResolver('fs', function () use (& $resolved_counter) {
             $resolved_counter++;
             return new DummyFilesystem('/tmp');
         });
@@ -114,7 +114,7 @@ class ExtendTest extends TestCase
     
         $resolved_counter = 0;
         
-        $this->container->deferred('fs', function () use (& $resolved_counter) {
+        $this->container->bindSingletonResolver('fs', function () use (& $resolved_counter) {
             $resolved_counter++;
             return new DummyFilesystem('/tmp');
         });

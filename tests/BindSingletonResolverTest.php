@@ -6,9 +6,9 @@ use PHPUnit\Framework\TestCase;
 use RockSymfony\ServiceContainer\ServiceContainer;
 
 /**
- * @see ServiceContainer::deferred()
+ * @see ServiceContainer::bindSingletonResolver()
  */
-class DeferredTest extends TestCase
+class BindSingletonResolverTest extends TestCase
 {
     /** @var ServiceContainer */
     private $container;
@@ -27,7 +27,7 @@ class DeferredTest extends TestCase
         
         $resolved_count = 0;
         
-        $this->container->deferred('now', function () use (& $resolved_count) {
+        $this->container->bindSingletonResolver('now', function () use (& $resolved_count) {
             $resolved_count++;
             return new DateTime();
         });

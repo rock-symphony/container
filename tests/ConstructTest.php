@@ -98,7 +98,7 @@ class ConstructTest extends TestCase
     public function it_should_recursively_resolve_dependencies()
     {
         $is_bind_resolution_called = false;
-        $this->container->resolver(DummyFilesystem::CLASS_NAME, function () use (& $is_bind_resolution_called) {
+        $this->container->bindResolver(DummyFilesystem::CLASS_NAME, function () use (& $is_bind_resolution_called) {
             $is_bind_resolution_called = true;
             return new DummyFilesystem('/');
         });

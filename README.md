@@ -90,14 +90,14 @@ $logger->info('Nice!');
 
 ### Binding to a resolver function 
 
-You can declare a service by providing a resolver closure function (`->resolver()`).
+You can declare a service by providing a resolver closure function (`->bindResolver()`).
 Service container will call that function every time you resolve service.
 
 ```php
 <?php
 /** @var $container \RockSymfony\ServiceContainer\ServiceContainer */
 // Definition:
-$container->resolver('now', function () {
+$container->bindResolver('now', function () {
     return new DateTime();
 });
 
@@ -115,13 +115,13 @@ echo $now === $another_now ? 'true' : 'false'; // == false
 You can defer service initialization until it is requested for the first time.
 A resolver function will be called just once and its result will be stored to service container.
 
-It works similar to `->bind()`, but stores result after first invocation.
+It works similar to `->bindResolver()`, but stores result after first invocation.
 
 ```php
 <?php
 /** @var $container \RockSymfony\ServiceContainer\ServiceContainer */
 // Definition:
-$container->deferred('cache', function () {
+$container->bindSingletonResolver('cache', function () {
     return new MemcacheCache('127.0.0.1');
 });
 

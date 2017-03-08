@@ -107,19 +107,19 @@ class ServiceContainer implements DependencyInjectingServiceContainer
     }
     
     /**
-     * Sets an entry resolver closure function.
+     * Sets a service entry resolver closure function.
      *
      * The closure function will be called every
      * time you resolve then given service ID.
      * Its result will be returned as resolved service instance.
      *
-     * @see deferred()
+     * @see bindSingletonResolver()
      *
      * @param string  $id       Service identifier or FQCN
      * @param Closure $resolver Resolver closure function which result will be used as resolved instance
      * @return void
      */
-    public function resolver($id, Closure $resolver)
+    public function bindResolver($id, Closure $resolver)
     {
         $this->dropStaleInstances($id);
         
@@ -127,20 +127,20 @@ class ServiceContainer implements DependencyInjectingServiceContainer
     }
     
     /**
-     * Sets an deferred service resolution function.
+     * Sets an deferred singleton service instance resolution function.
      *
      * The closure function will be called just once.
      * Its result will be stored inside service container
      * and returned for all future resolutions of the service ID.
      *
-     * Works similar as `->resolver()`, but stores result for future resolutions.
-     * @see resolver()
+     * Works similar as `->bindResolver()`, but stores result for future resolutions.
+     * @see bindResolver()
      *
      * @param string  $id       Service identifier or FQCN
      * @param Closure $resolver Resolver closure function which result will be used as resolved instance
      * @return void
      */
-    public function deferred($id, Closure $resolver)
+    public function bindSingletonResolver($id, Closure $resolver)
     {
         $this->dropStaleInstances($id);
         
