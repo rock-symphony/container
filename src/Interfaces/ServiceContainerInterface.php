@@ -85,8 +85,8 @@ interface ServiceContainerInterface extends PsrContainerInterface
     /**
      * "Extend" an abstract type in the container.
      *
-     * @param  string    $abstract
-     * @param  \Closure  $closure
+     * @param  string   $abstract
+     * @param  \Closure $closure
      * @return void
      *
      * @throws \InvalidArgumentException
@@ -109,8 +109,8 @@ interface ServiceContainerInterface extends PsrContainerInterface
      * Call the given Closure / class@method and inject its dependencies.
      *
      * @param  callable|string $callback
-     * @param  array $parameters
-     * @param  string|null $defaultMethod
+     * @param  array           $parameters
+     * @param  string|null     $defaultMethod
      * @return mixed
      */
     public function call($callback, array $parameters = [], $defaultMethod = null);

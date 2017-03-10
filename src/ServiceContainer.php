@@ -86,7 +86,7 @@ class ServiceContainer implements ServiceContainerInterface
      */
     public function get($id)
     {
-        if (! $this->has($id)) {
+        if ( ! $this->has($id)) {
             throw new BindingNotFoundException("Requested [$id] binding cannot be found.");
         }
         return $this->resolve($id);
@@ -95,8 +95,8 @@ class ServiceContainer implements ServiceContainerInterface
     /**
      * Register an existing instance as shared in the container.
      *
-     * @param  string  $abstract
-     * @param  mixed   $instance
+     * @param  string $abstract
+     * @param  mixed  $instance
      * @return void
      */
     public function set($abstract, $instance)
@@ -150,8 +150,8 @@ class ServiceContainer implements ServiceContainerInterface
     /**
      * "Extend" an abstract type in the container.
      *
-     * @param  string    $abstract
-     * @param  \Closure  $closure
+     * @param  string   $abstract
+     * @param  \Closure $closure
      * @return void
      *
      * @throws \InvalidArgumentException
@@ -206,7 +206,7 @@ class ServiceContainer implements ServiceContainerInterface
     /**
      * Determine if the given string is in Class@method syntax.
      *
-     * @param  mixed  $callback
+     * @param  mixed $callback
      * @return bool
      */
     private function isCallableWithAtSign($callback)
@@ -217,8 +217,8 @@ class ServiceContainer implements ServiceContainerInterface
     /**
      * Get all dependencies for a given method.
      *
-     * @param  callable|string  $callback
-     * @param  array  $parameters
+     * @param  callable|string $callback
+     * @param  array           $parameters
      * @return array
      */
     private function getMethodDependencies($callback, array $parameters = [])
@@ -235,7 +235,7 @@ class ServiceContainer implements ServiceContainerInterface
     /**
      * Get the proper reflection instance for the given callback.
      *
-     * @param  callable|string  $callback
+     * @param  callable|string $callback
      * @return \ReflectionFunctionAbstract
      */
     private function getCallReflector($callback)
@@ -254,9 +254,9 @@ class ServiceContainer implements ServiceContainerInterface
     /**
      * Get the dependency for the given call parameter.
      *
-     * @param  \ReflectionParameter  $parameter
-     * @param  array  $parameters
-     * @param  array  $dependencies
+     * @param  \ReflectionParameter $parameter
+     * @param  array                $parameters
+     * @param  array                $dependencies
      * @return void
      */
     private function addDependencyForCallParameter(ReflectionParameter $parameter, array &$parameters, &$dependencies)
@@ -276,9 +276,9 @@ class ServiceContainer implements ServiceContainerInterface
     /**
      * Call a string reference to a class using Class@method syntax.
      *
-     * @param  string  $target
-     * @param  array  $parameters
-     * @param  string|null  $defaultMethod
+     * @param  string      $target
+     * @param  array       $parameters
+     * @param  string|null $defaultMethod
      * @return mixed
      *
      * @throws \InvalidArgumentException
@@ -302,8 +302,8 @@ class ServiceContainer implements ServiceContainerInterface
     /**
      * Resolve the given type from the container.
      *
-     * @param  string  $abstract
-     * @param  array   $parameters
+     * @param  string $abstract
+     * @param  array  $parameters
      * @return mixed
      */
     public function resolve($abstract, array $parameters = [])
@@ -316,18 +316,18 @@ class ServiceContainer implements ServiceContainerInterface
         if (isset($this->instances[$abstract])) {
             return $this->instances[$abstract];
         }
-    
+        
         $concrete = $this->getConcrete($abstract);
-    
+        
         // We're ready to instantiate an instance of the concrete type registered for
         // the binding. This will instantiate the types, as well as resolve any of
         // its "nested" dependencies recursively until all have gotten resolved.
         if ($concrete === $abstract) {
             $object = $this->construct($concrete, $parameters);
-        
+            
         } elseif ($concrete instanceof Closure) {
             $object = $concrete($this, $parameters);
-        
+            
         } else {
             $object = $this->resolve($concrete, $parameters);
         }
@@ -362,7 +362,7 @@ class ServiceContainer implements ServiceContainerInterface
         // If we don't have a registered resolver or concrete for the type, we'll just
         // assume each type is a concrete name and will attempt to resolve it as is
         // since the container should be able to resolve concretes automatically.
-        if (! isset($this->bindings[$abstract])) {
+        if ( ! isset($this->bindings[$abstract])) {
             return $abstract;
         }
         
@@ -372,7 +372,7 @@ class ServiceContainer implements ServiceContainerInterface
     /**
      * Get the extender callbacks for a given type.
      *
-     * @param  string  $abstract
+     * @param  string $abstract
      * @return array
      */
     private function getExtenders($abstract)
@@ -387,8 +387,8 @@ class ServiceContainer implements ServiceContainerInterface
     /**
      * Instantiate a concrete instance of the given type.
      *
-     * @param  string  $concrete
-     * @param  array   $parameters
+     * @param  string $concrete
+     * @param  array  $parameters
      * @return mixed
      *
      * @throws \RockSymphony\ServiceContainer\Exceptions\BindingResolutionException
@@ -406,8 +406,8 @@ class ServiceContainer implements ServiceContainerInterface
         // If the type is not instantiable, the developer is attempting to resolve
         // an abstract type such as an Interface of Abstract Class and there is
         // no binding registered for the abstractions so we need to bail out.
-        if (! $reflector->isInstantiable()) {
-            if (! empty($this->buildStack)) {
+        if ( ! $reflector->isInstantiable()) {
+            if ( ! empty($this->buildStack)) {
                 $previous = implode(', ', $this->buildStack);
                 
                 $message = "Target [$concrete] is not instantiable while building [$previous].";
@@ -437,11 +437,11 @@ class ServiceContainer implements ServiceContainerInterface
         // dependency instances and then use the reflection instances to make a
         // new instance of this class, injecting the created dependencies in.
         $parameters = $this->keyParametersByArgument(
-          $dependencies, $parameters
+            $dependencies, $parameters
         );
         
         $instances = $this->getDependencies(
-          $dependencies, $parameters
+            $dependencies, $parameters
         );
         
         array_pop($this->buildStack);
@@ -452,8 +452,8 @@ class ServiceContainer implements ServiceContainerInterface
     /**
      * Resolve all of the dependencies from the ReflectionParameters.
      *
-     * @param  array  $parameters
-     * @param  array  $primitives
+     * @param  array $parameters
+     * @param  array $primitives
      * @return array
      */
     private function getDependencies(array $parameters, array $primitives = [])
@@ -481,7 +481,7 @@ class ServiceContainer implements ServiceContainerInterface
     /**
      * Resolve a non-class hinted dependency.
      *
-     * @param  \ReflectionParameter  $parameter
+     * @param  \ReflectionParameter $parameter
      * @return mixed
      *
      * @throws \RockSymphony\ServiceContainer\Exceptions\BindingResolutionException
@@ -500,7 +500,7 @@ class ServiceContainer implements ServiceContainerInterface
     /**
      * Resolve a class based dependency from the container.
      *
-     * @param  \ReflectionParameter  $parameter
+     * @param  \ReflectionParameter $parameter
      * @return mixed
      *
      * @throws \RockSymphony\ServiceContainer\Exceptions\BindingResolutionException
@@ -509,12 +509,10 @@ class ServiceContainer implements ServiceContainerInterface
     {
         try {
             return $this->resolve($parameter->getClass()->name);
-        }
-            
+        } catch (BindingResolutionException $e) {
             // If we can not resolve the class instance, we will check to see if the value
             // is optional, and if it is we will return the optional parameter value as
             // the value of the dependency, similarly to how we do this with scalars.
-        catch (BindingResolutionException $e) {
             if ($parameter->isOptional()) {
                 return $parameter->getDefaultValue();
             }
@@ -526,8 +524,8 @@ class ServiceContainer implements ServiceContainerInterface
     /**
      * If extra parameters are passed by numeric ID, rekey them by argument name.
      *
-     * @param  array  $dependencies
-     * @param  array  $parameters
+     * @param  array $dependencies
+     * @param  array $parameters
      * @return array
      */
     private function keyParametersByArgument(array $dependencies, array $parameters)
@@ -547,7 +545,7 @@ class ServiceContainer implements ServiceContainerInterface
     /**
      * Determine if a given type is shared.
      *
-     * @param  string  $abstract
+     * @param  string $abstract
      * @return bool
      */
     private function isShared($abstract)
@@ -556,7 +554,7 @@ class ServiceContainer implements ServiceContainerInterface
             return true;
         }
         
-        if (! isset($this->bindings[$abstract]['shared'])) {
+        if ( ! isset($this->bindings[$abstract]['shared'])) {
             return false;
         }
         
@@ -566,7 +564,7 @@ class ServiceContainer implements ServiceContainerInterface
     /**
      * Determine if a given string is an alias.
      *
-     * @param  string  $name
+     * @param  string $name
      * @return bool
      */
     private function isAlias($name)
@@ -577,14 +575,14 @@ class ServiceContainer implements ServiceContainerInterface
     /**
      * Get the alias for an abstract if available.
      *
-     * @param  string  $abstract
+     * @param  string $abstract
      * @return string
      *
      * @throws \LogicException
      */
     private function getAlias($abstract)
     {
-        if (! isset($this->aliases[$abstract])) {
+        if ( ! isset($this->aliases[$abstract])) {
             return $abstract;
         }
         
@@ -598,7 +596,7 @@ class ServiceContainer implements ServiceContainerInterface
     /**
      * Drop all of the stale instances and aliases.
      *
-     * @param  string  $abstract
+     * @param  string $abstract
      * @return void
      */
     private function dropStaleInstances($abstract)
