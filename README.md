@@ -5,8 +5,8 @@ An indie Service Container implementation based on Laravel Container.
 
 ### Philosophy
 
-- Based on Laravel Container (has most of features of [illuminate/container](laravel-container) 5.3)
-- [PSR Container](psr-11) compatibility
+- Based on Laravel Container (has most of features of [illuminate/container][laravel-container] 5.3)
+- [PSR Container][psr-11] compatibility
 - [Semantic Versioning](http://semver.org/)
 - One dependency (psr/container interface)
 
@@ -193,7 +193,7 @@ $logging_cache = $container->construct(LoggingCacheDecorator::class, ['options' 
 
 #### Dependency-injecting method call
 
-You can call *any [callable](php-callable)* automatically injecting dependencies from service container.
+You can call *any [callable][php-callable]* automatically injecting dependencies from service container.
 It's primarily intended, but not limited, to call application HTTP controllers. 
 
 ```php
@@ -247,13 +247,13 @@ $container->call(function (PostsRepository $repository) {
 FAQ
 ---
 
-1. Why not use [Laravel Container](laravel-container)?
+1. Why not use [Laravel Container][laravel-container]?
 
   > We were using Laravel Container for our project internally. 
   > But it's a bad candidate to link it as library as:
   > 
   > - It doesn't follow SemVer &ndash; BC breaks on every minor version bump 
-  > - It has unneeded dependency to flooded [illuminate/contracts](laravel-contracts)
+  > - It has unneeded dependency to flooded [illuminate/contracts][laravel-contracts]
   > - It's designed to be used as part of Laravel Framework, thus it's almost unusable as-a-library
   > - You can use all laravel components only at certain version (i.e. all at 5.3; or all at 5.4; but not mixing)
   > - If you want to move forward you are forced to upgrade to latest PHP version (i.e. container 5.4 requires PHP 7.0)
@@ -264,7 +264,7 @@ FAQ
 License
 -------
 
-This project is licensed under the terms of the [MIT license](mit-license).
+This project is licensed under the terms of the [MIT license][mit-license].
 
 
 [laravel-container]: https://laravel.com/docs/5.3/container
