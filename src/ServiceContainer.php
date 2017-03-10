@@ -180,10 +180,12 @@ class ServiceContainer implements DependencyInjectingServiceContainer
     /**
      * Call the given Closure / class@method and inject its dependencies.
      *
-     * @param  callable|string  $callback
-     * @param  array  $parameters
-     * @param  string|null  $defaultMethod
+     * @param  callable|string $callback
+     * @param  array           $parameters
+     * @param  string|null     $defaultMethod
      * @return mixed
+     *
+     * @throws BindingResolutionException
      */
     public function call($callback, array $parameters = [], $defaultMethod = null)
     {
