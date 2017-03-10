@@ -260,7 +260,15 @@ FAQ
   > - Bloated public API: 31 public API methods (vs 10 public methods in this library) 
   > - Questionable method naming: what's the difference between `->make()` and `->build()`? 
 
+
+License
+-------
+
+This project is licensed under the terms of the [MIT license](mit-license).
+
+
 [laravel-container]: https://laravel.com/docs/5.3/container
 [laravel-contracts]: https://github.com/illuminate/contracts
 [psr-11]: https://github.com/container-interop/fig-standards/blob/master/proposed/container.md
 [php-callable]: http://php.net/manual/en/language.types.callable.php
+[mit-license]: https://opensource.org/licenses/MIT
