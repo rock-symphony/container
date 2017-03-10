@@ -1,5 +1,5 @@
 {
-    "name": "rocksymfony/container",
+    "name": "rock-symphony/container",
     "description": "An indie Service Container implementation based on Laravel Container",
     "type": "library",
     "license": "MIT",
@@ -17,12 +17,12 @@
 
     "autoload": {
         "psr-4": {
-            "RockSymfony\\ServiceContainer\\": "src/"
+            "RockSymphony\\ServiceContainer\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "RockSymfony\\ServiceContainer\\Tests\\": "tests/"
+            "RockSymphony\\ServiceContainer\\Tests\\": "tests/"
         }
     },
     "require-dev": {

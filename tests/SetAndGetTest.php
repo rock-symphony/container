@@ -1,8 +1,8 @@
 <?php
-namespace RockSymfony\ServiceContainer\Tests;
+namespace RockSymphony\ServiceContainer\Tests;
 
 use PHPUnit\Framework\TestCase;
-use RockSymfony\ServiceContainer\ServiceContainer;
+use RockSymphony\ServiceContainer\ServiceContainer;
 
 /**
  * @see ServiceContainer::set()
@@ -50,7 +50,7 @@ class SetAndGetTest extends TestCase
      */
     public function it_should_fail_if_unknown_binding_requested()
     {
-        $this->expectException('RockSymfony\ServiceContainer\Exceptions\BindingResolutionException');
+        $this->expectException('RockSymphony\ServiceContainer\Exceptions\BindingResolutionException');
         $this->container->resolve('unicorn');
     }
 }

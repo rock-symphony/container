@@ -1,5 +1,5 @@
 <?php
-namespace RockSymfony\ServiceContainer\Tests\Support;
+namespace RockSymphony\ServiceContainer\Tests\Support;
 
 class DummyFilesystem
 {

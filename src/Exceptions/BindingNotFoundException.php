@@ -1,5 +1,5 @@
 <?php
-namespace RockSymfony\ServiceContainer\Exceptions;
+namespace RockSymphony\ServiceContainer\Exceptions;
 
 use Exception;
 use Psr\Container\NotFoundExceptionInterface;

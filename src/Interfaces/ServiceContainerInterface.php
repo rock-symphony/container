@@ -1,11 +1,11 @@
 <?php
-namespace RockSymfony\ServiceContainer\Interfaces;
+namespace RockSymphony\ServiceContainer\Interfaces;
 
 use Closure;
 use Psr\Container\ContainerInterface as PsrContainerInterface;
 
 /**
- * RockSymfony Container public API interface (for clear big picture on functionality)
+ * RockSymphony Container public API interface (for clear big picture on functionality)
  */
 interface ServiceContainerInterface extends PsrContainerInterface
 {
@@ -14,8 +14,8 @@ interface ServiceContainerInterface extends PsrContainerInterface
      *
      * @param string $id Identifier of the entry to look for.
      *
-     * @throws \RockSymfony\ServiceContainer\Exceptions\BindingNotFoundException No entry was found for this identifier.
-     * @throws \RockSymfony\ServiceContainer\Exceptions\BindingResolutionException Error while retrieving the entry.
+     * @throws \RockSymphony\ServiceContainer\Exceptions\BindingNotFoundException No entry was found for this identifier.
+     * @throws \RockSymphony\ServiceContainer\Exceptions\BindingResolutionException Error while retrieving the entry.
      *
      * @return mixed Entry.
      */
@@ -99,7 +99,7 @@ interface ServiceContainerInterface extends PsrContainerInterface
      * @param string $class
      * @param array  $parameters
      *
-     * @throws \RockSymfony\ServiceContainer\Exceptions\BindingResolutionException Error while resolving dependencies.
+     * @throws \RockSymphony\ServiceContainer\Exceptions\BindingResolutionException Error while resolving dependencies.
      *
      * @return mixed
      */
@@ -120,8 +120,8 @@ interface ServiceContainerInterface extends PsrContainerInterface
      *
      * @param string $abstract
      *
-     * @throws \RockSymfony\ServiceContainer\Exceptions\BindingNotFoundException   Error while resolving dependencies.
-     * @throws \RockSymfony\ServiceContainer\Exceptions\BindingResolutionException Error while resolving dependencies.
+     * @throws \RockSymphony\ServiceContainer\Exceptions\BindingNotFoundException   Error while resolving dependencies.
+     * @throws \RockSymphony\ServiceContainer\Exceptions\BindingResolutionException Error while resolving dependencies.
      *
      * @return mixed Resolved concrete implementation of an abstract or a bound named service
      */

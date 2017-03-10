@@ -1,9 +1,9 @@
 <?php
-namespace RockSymfony\ServiceContainer\Tests;
+namespace RockSymphony\ServiceContainer\Tests;
 
 use DateTime;
 use PHPUnit\Framework\TestCase;
-use RockSymfony\ServiceContainer\ServiceContainer;
+use RockSymphony\ServiceContainer\ServiceContainer;
 
 /**
  * @see ServiceContainer::bindSingletonResolver()

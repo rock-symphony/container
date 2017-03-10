@@ -1,11 +1,11 @@
 <?php
-namespace RockSymfony\ServiceContainer\Tests;
+namespace RockSymphony\ServiceContainer\Tests;
 
 use PHPUnit\Framework\TestCase;
-use RockSymfony\ServiceContainer\ServiceContainer;
-use RockSymfony\ServiceContainer\Tests\Support\DummyCache;
-use RockSymfony\ServiceContainer\Tests\Support\DummyCounter;
-use RockSymfony\ServiceContainer\Tests\Support\DummyFilesystem;
+use RockSymphony\ServiceContainer\ServiceContainer;
+use RockSymphony\ServiceContainer\Tests\Support\DummyCache;
+use RockSymphony\ServiceContainer\Tests\Support\DummyCounter;
+use RockSymphony\ServiceContainer\Tests\Support\DummyFilesystem;
 
 /**
  * @see ServiceContainer::construct()
@@ -79,7 +79,7 @@ class ConstructTest extends TestCase
      */
     public function it_should_fail_if_a_required_not_hinted_parameter_is_not_specified()
     {
-        $this->expectException('RockSymfony\ServiceContainer\Exceptions\BindingResolutionException');
+        $this->expectException('RockSymphony\ServiceContainer\Exceptions\BindingResolutionException');
         $this->container->construct(DummyFilesystem::CLASS_NAME);
     }
     
@@ -88,7 +88,7 @@ class ConstructTest extends TestCase
      */
     public function it_should_recursively_resolve_dependencies_and_fail_if_it_is_not_possible()
     {
-        $this->expectException('RockSymfony\ServiceContainer\Exceptions\BindingResolutionException');
+        $this->expectException('RockSymphony\ServiceContainer\Exceptions\BindingResolutionException');
         $this->container->construct(DummyCache::CLASS_NAME);
     }
     

@@ -1,5 +1,5 @@
 <?php
-namespace RockSymfony\ServiceContainer;
+namespace RockSymphony\ServiceContainer;
 
 use Closure;
 use Exception;
@@ -10,9 +10,9 @@ use ReflectionMethod;
 use ReflectionFunction;
 use ReflectionParameter;
 use InvalidArgumentException;
-use RockSymfony\ServiceContainer\Interfaces\ServiceContainerInterface;
-use RockSymfony\ServiceContainer\Exceptions\BindingNotFoundException;
-use RockSymfony\ServiceContainer\Exceptions\BindingResolutionException;
+use RockSymphony\ServiceContainer\Interfaces\ServiceContainerInterface;
+use RockSymphony\ServiceContainer\Exceptions\BindingNotFoundException;
+use RockSymphony\ServiceContainer\Exceptions\BindingResolutionException;
 
 class ServiceContainer implements ServiceContainerInterface
 {
@@ -391,7 +391,7 @@ class ServiceContainer implements ServiceContainerInterface
      * @param  array   $parameters
      * @return mixed
      *
-     * @throws \RockSymfony\ServiceContainer\Exceptions\BindingResolutionException
+     * @throws \RockSymphony\ServiceContainer\Exceptions\BindingResolutionException
      */
     public function construct($concrete, array $parameters = [])
     {
@@ -484,7 +484,7 @@ class ServiceContainer implements ServiceContainerInterface
      * @param  \ReflectionParameter  $parameter
      * @return mixed
      *
-     * @throws \RockSymfony\ServiceContainer\Exceptions\BindingResolutionException
+     * @throws \RockSymphony\ServiceContainer\Exceptions\BindingResolutionException
      */
     private function resolveNonClass(ReflectionParameter $parameter)
     {
@@ -503,7 +503,7 @@ class ServiceContainer implements ServiceContainerInterface
      * @param  \ReflectionParameter  $parameter
      * @return mixed
      *
-     * @throws \RockSymfony\ServiceContainer\Exceptions\BindingResolutionException
+     * @throws \RockSymphony\ServiceContainer\Exceptions\BindingResolutionException
      */
     private function resolveClass(ReflectionParameter $parameter)
     {

@@ -1,5 +1,5 @@
-RockSymfony Service Container
-=============================
+RockSymphony Service Container
+==============================
 
 An indie Service Container implementation based on Laravel Container.
 
@@ -27,7 +27,7 @@ as well as check if container has specific service (`->has()`).
 ```php
 <?php
 
-use RockSymfony\ServiceContainer\ServiceContainer;
+use RockSymphony\ServiceContainer\ServiceContainer;
 
 $container = new ServiceContainer();
 
@@ -53,7 +53,7 @@ to explicitly declare it's interface on both definition and consumer sides.
  
 ```php
 <?php
-/** @var $container \RockSymfony\ServiceContainer\ServiceContainer */
+/** @var $container \RockSymphony\ServiceContainer\ServiceContainer */
 // Definition:
 // Note we bind instance by it's **abstract** interface.
 // This way you force consumers to not care about implementation details, but rely on interface. 
@@ -75,7 +75,7 @@ You can use aliases for that (`->alias()`):
 
 ```php
 <?php
-/** @var $container \RockSymfony\ServiceContainer\ServiceContainer */
+/** @var $container \RockSymphony\ServiceContainer\ServiceContainer */
 // Definition:
 $container->alias('logger', \Psr\Log\LoggerInterface::class);
 
@@ -95,7 +95,7 @@ Service container will call that function every time you resolve service.
 
 ```php
 <?php
-/** @var $container \RockSymfony\ServiceContainer\ServiceContainer */
+/** @var $container \RockSymphony\ServiceContainer\ServiceContainer */
 // Definition:
 $container->bindResolver('now', function () {
     return new DateTime();
@@ -119,7 +119,7 @@ It works similar to `->bindResolver()`, but stores result after first invocation
 
 ```php
 <?php
-/** @var $container \RockSymfony\ServiceContainer\ServiceContainer */
+/** @var $container \RockSymphony\ServiceContainer\ServiceContainer */
 // Definition:
 $container->bindSingletonResolver('cache', function () {
     return new MemcacheCache('127.0.0.1');
@@ -138,7 +138,7 @@ You can extend/decorate an existing service binding with `->extend()` method.
 
 ```php
 <?php
-use RockSymfony\ServiceContainer\ServiceContainer;
+use RockSymphony\ServiceContainer\ServiceContainer;
 
 /** @var $container ServiceContainer */
 // Definition:
@@ -178,7 +178,7 @@ class LoggingCacheDecorator {
     }
 }
 
-/** @var $container RockSymfony\ServiceContainer\ServiceContainer */
+/** @var $container RockSymphony\ServiceContainer\ServiceContainer */
 // Definition:
 $container->set(LoggerInterface::class, $logger);
 $container->set(CacheInterface::class, $cache);
@@ -198,7 +198,7 @@ It's primarily intended, but not limited, to call application HTTP controllers.
 
 ```php
 <?php
-/** @var $container RockSymfony\ServiceContainer\ServiceContainer */
+/** @var $container RockSymphony\ServiceContainer\ServiceContainer */
 
 class MyController {
     public function showPost($url, PostsRepository $posts, TemplateEngine $templates)

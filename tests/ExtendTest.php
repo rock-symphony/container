@@ -1,10 +1,10 @@
 <?php
-namespace RockSymfony\ServiceContainer\Tests;
+namespace RockSymphony\ServiceContainer\Tests;
 
 use PHPUnit\Framework\TestCase;
-use RockSymfony\ServiceContainer\ServiceContainer;
-use RockSymfony\ServiceContainer\Tests\Support\DummyFilesystem;
-use RockSymfony\ServiceContainer\Tests\Support\DummyFilesystemDecorator;
+use RockSymphony\ServiceContainer\ServiceContainer;
+use RockSymphony\ServiceContainer\Tests\Support\DummyFilesystem;
+use RockSymphony\ServiceContainer\Tests\Support\DummyFilesystemDecorator;
 
 /**
  * @see ServiceContainer::extend()

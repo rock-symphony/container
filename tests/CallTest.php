@@ -1,12 +1,9 @@
 <?php
-namespace RockSymfony\ServiceContainer\Tests;
+namespace RockSymphony\ServiceContainer\Tests;
 
 use PHPUnit\Framework\TestCase;
-use RockSymfony\ServiceContainer\Exceptions\BindingResolutionException;
-use RockSymfony\ServiceContainer\ServiceContainer;
-use RockSymfony\ServiceContainer\Tests\Support\DummyCache;
-use RockSymfony\ServiceContainer\Tests\Support\DummyCounter;
-use RockSymfony\ServiceContainer\Tests\Support\DummyFilesystem;
+use RockSymphony\ServiceContainer\Exceptions\BindingResolutionException;
+use RockSymphony\ServiceContainer\ServiceContainer;
 
 /**
  * @see ServiceContainer::construct()
