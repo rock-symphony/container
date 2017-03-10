@@ -81,4 +81,15 @@ interface ServiceContainer extends PsrContainerInterface
      * @return void
      */
     public function alias($id, $alias);
+    
+    /**
+     * "Extend" an abstract type in the container.
+     *
+     * @param  string    $abstract
+     * @param  \Closure  $closure
+     * @return void
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function extend($abstract, Closure $closure);
 }
