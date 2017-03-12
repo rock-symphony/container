@@ -1,4 +1,5 @@
 <?php
+
 namespace RockSymphony\ServiceContainer\Exceptions;
 
 use Exception;
