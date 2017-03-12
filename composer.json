@@ -12,6 +12,7 @@
     "minimum-stability": "stable",
 
     "require": {
+        "php": "^5.3|^7.0",
         "psr/container": "^1.0"
     },
 
