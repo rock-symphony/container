@@ -12,6 +12,7 @@ An indie Service Container implementation based on Laravel Container.
 
 ### Features
 
+- PHP 5.3+, PHP 7.0+
 - Automatic dependencies resolution
 - Dependency-injecting constructor calls
 - Dependency-injecting method calls
