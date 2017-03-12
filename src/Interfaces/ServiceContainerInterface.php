@@ -1,11 +1,12 @@
 <?php
+
 namespace RockSymphony\ServiceContainer\Interfaces;
 
 use Closure;
 use Psr\Container\ContainerInterface as PsrContainerInterface;
 
 /**
- * RockSymphony Container public API interface (for clear big picture on functionality)
+ * RockSymphony Container public API interface (for clear big picture on functionality).
  */
 interface ServiceContainerInterface extends PsrContainerInterface
 {
@@ -14,13 +15,13 @@ interface ServiceContainerInterface extends PsrContainerInterface
      *
      * @param string $id Identifier of the entry to look for.
      *
-     * @throws \RockSymphony\ServiceContainer\Exceptions\BindingNotFoundException No entry was found for this identifier.
+     * @throws \RockSymphony\ServiceContainer\Exceptions\BindingNotFoundException   No entry was found for this identifier.
      * @throws \RockSymphony\ServiceContainer\Exceptions\BindingResolutionException Error while retrieving the entry.
      *
      * @return mixed Entry.
      */
     public function get($id);
-    
+
     /**
      * Returns true if the container can return an entry for the given identifier.
      * Returns false otherwise.
@@ -30,10 +31,10 @@ interface ServiceContainerInterface extends PsrContainerInterface
      *
      * @param string $id Identifier of the entry to look for.
      *
-     * @return boolean
+     * @return bool
      */
     public function has($id);
-    
+
     /**
      * Sets an entry of the container by its identifier.
      *
@@ -41,7 +42,7 @@ interface ServiceContainerInterface extends PsrContainerInterface
      * @param mixed  $instance Entry
      */
     public function set($id, $instance);
-    
+
     /**
      * Binds an entry resolver closure function.
      *
@@ -53,10 +54,11 @@ interface ServiceContainerInterface extends PsrContainerInterface
      *
      * @param string  $id       Service identifier or FQCN
      * @param Closure $resolver Resolver closure function which result will be used as resolved instance
+     *
      * @return void
      */
     public function bindResolver($id, Closure $resolver);
-    
+
     /**
      * Sets an deferred service resolution function.
      *
@@ -65,34 +67,38 @@ interface ServiceContainerInterface extends PsrContainerInterface
      * and returned for all future resolutions of the service ID.
      *
      * Works similar as `->resolver()`, but stores result for future resolutions.
+     *
      * @see bindResolver()
      *
      * @param string  $id       Service identifier or FQCN
      * @param Closure $resolver Resolver closure function which result will be used as resolved instance
+     *
      * @return void
      */
     public function bindSingletonResolver($id, Closure $resolver);
-    
+
     /**
      * Makes the same binding/entry be available by another name.
      *
      * @param string $id    Original binding/entry
      * @param string $alias Another name that should also resolve to original entry
+     *
      * @return void
      */
     public function alias($id, $alias);
-    
+
     /**
      * "Extend" an abstract type in the container.
      *
-     * @param  string   $abstract
-     * @param  \Closure $closure
-     * @return void
+     * @param string   $abstract
+     * @param \Closure $closure
      *
      * @throws \InvalidArgumentException
+     *
+     * @return void
      */
     public function extend($abstract, Closure $closure);
-    
+
     /**
      * Creates an instance of any class resolving dependencies recursively.
      *
@@ -104,17 +110,18 @@ interface ServiceContainerInterface extends PsrContainerInterface
      * @return mixed
      */
     public function construct($class, array $parameters = array());
-    
+
     /**
      * Call the given Closure / class@method and inject its dependencies.
      *
-     * @param  callable|string $callback
-     * @param  array           $parameters
-     * @param  string|null     $defaultMethod
+     * @param callable|string $callback
+     * @param array           $parameters
+     * @param string|null     $defaultMethod
+     *
      * @return mixed
      */
     public function call($callback, array $parameters = array(), $defaultMethod = null);
-    
+
     /**
      * Resolves an abstract dependency from container or instantiate a new instance of given class.
      *
