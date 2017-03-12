@@ -1,6 +1,9 @@
 RockSymphony Service Container
 ==============================
 
+<img src="https://travis-ci.org/rock-symphony/container.svg?branch=master" alt="Build status"/>
+
+
 An indie Service Container implementation based on Laravel Container.
 
 ### Philosophy
