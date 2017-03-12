@@ -21,42 +21,42 @@ class ServiceContainer implements ServiceContainerInterface
      *
      * @var array
      */
-    protected $resolved = [];
+    protected $resolved = array();
     
     /**
      * The container's bindings.
      *
      * @var array
      */
-    protected $bindings = [];
+    protected $bindings = array();
     
     /**
      * The container's shared instances.
      *
      * @var array
      */
-    protected $instances = [];
+    protected $instances = array();
     
     /**
      * The registered type aliases.
      *
      * @var array
      */
-    protected $aliases = [];
+    protected $aliases = array();
     
     /**
      * The extension closures for services.
      *
      * @var array
      */
-    protected $extenders = [];
+    protected $extenders = array();
     
     /**
      * The stack of concretions currently being built.
      *
      * @var array
      */
-    protected $buildStack = [];
+    protected $buildStack = array();
     
     /**
      * Returns true if the container can return an entry for the given identifier.
@@ -123,7 +123,7 @@ class ServiceContainer implements ServiceContainerInterface
     {
         $this->dropStaleInstances($id);
         
-        $this->bindings[$id] = ['resolver' => $resolver, 'shared' => false];
+        $this->bindings[$id] = array('resolver' => $resolver, 'shared' => false);
     }
     
     /**
@@ -144,7 +144,7 @@ class ServiceContainer implements ServiceContainerInterface
     {
         $this->dropStaleInstances($id);
         
-        $this->bindings[$id] = ['resolver' => $resolver, 'shared' => true];
+        $this->bindings[$id] = array('resolver' => $resolver, 'shared' => true);
     }
     
     /**
@@ -187,7 +187,7 @@ class ServiceContainer implements ServiceContainerInterface
      *
      * @throws BindingResolutionException
      */
-    public function call($callback, array $parameters = [], $defaultMethod = null)
+    public function call($callback, array $parameters = array(), $defaultMethod = null)
     {
         if ($this->isCallableWithAtSign($callback) || $defaultMethod) {
             return $this->callClass($callback, $parameters, $defaultMethod);
@@ -221,9 +221,9 @@ class ServiceContainer implements ServiceContainerInterface
      * @param  array           $parameters
      * @return array
      */
-    private function getMethodDependencies($callback, array $parameters = [])
+    private function getMethodDependencies($callback, array $parameters = array())
     {
-        $dependencies = [];
+        $dependencies = array();
         
         foreach ($this->getCallReflector($callback)->getParameters() as $parameter) {
             $this->addDependencyForCallParameter($parameter, $parameters, $dependencies);
@@ -283,7 +283,7 @@ class ServiceContainer implements ServiceContainerInterface
      *
      * @throws \InvalidArgumentException
      */
-    private function callClass($target, array $parameters = [], $defaultMethod = null)
+    private function callClass($target, array $parameters = array(), $defaultMethod = null)
     {
         $segments = explode('@', $target);
         
@@ -296,7 +296,7 @@ class ServiceContainer implements ServiceContainerInterface
             throw new InvalidArgumentException('Method not provided.');
         }
         
-        return $this->call([$this->resolve($segments[0]), $method], $parameters);
+        return $this->call(array($this->resolve($segments[0]), $method), $parameters);
     }
     
     /**
@@ -306,7 +306,7 @@ class ServiceContainer implements ServiceContainerInterface
      * @param  array  $parameters
      * @return mixed
      */
-    public function resolve($abstract, array $parameters = [])
+    public function resolve($abstract, array $parameters = array())
     {
         $abstract = $this->getAlias($abstract);
         
@@ -381,7 +381,7 @@ class ServiceContainer implements ServiceContainerInterface
             return $this->extenders[$abstract];
         }
         
-        return [];
+        return array();
     }
     
     /**
@@ -393,7 +393,7 @@ class ServiceContainer implements ServiceContainerInterface
      *
      * @throws \RockSymphony\ServiceContainer\Exceptions\BindingResolutionException
      */
-    public function construct($concrete, array $parameters = [])
+    public function construct($concrete, array $parameters = array())
     {
         try {
             $reflector = new ReflectionClass($concrete);
@@ -456,9 +456,9 @@ class ServiceContainer implements ServiceContainerInterface
      * @param  array $primitives
      * @return array
      */
-    private function getDependencies(array $parameters, array $primitives = [])
+    private function getDependencies(array $parameters, array $primitives = array())
     {
-        $dependencies = [];
+        $dependencies = array();
         
         foreach ($parameters as $parameter) {
             $dependency = $parameter->getClass();
