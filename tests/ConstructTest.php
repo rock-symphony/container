@@ -104,10 +104,10 @@ class ConstructTest extends TestCase
         });
         
         /** @var DummyCache $cache */
-        $cache = $this->container->construct(DummyCache::CLASS_NAME, ['options' => ['ttl' => '1 year']]);
+        $cache = $this->container->construct(DummyCache::CLASS_NAME, array('options' => array('ttl' => '1 year')));
         $this->assertTrue($cache instanceof DummyCache);
         $this->assertTrue($cache->filesystem instanceof DummyFilesystem);
         $this->assertTrue($is_bind_resolution_called);
-        $this->assertEquals(['ttl' => '1 year'], $cache->options);
+        $this->assertEquals(array('ttl' => '1 year'), $cache->options);
     }
 }
