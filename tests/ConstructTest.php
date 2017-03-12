@@ -79,7 +79,7 @@ class ConstructTest extends TestCase
      */
     public function it_should_fail_if_a_required_not_hinted_parameter_is_not_specified()
     {
-        $this->expectException('RockSymphony\ServiceContainer\Exceptions\BindingResolutionException');
+        $this->setExpectedException('RockSymphony\ServiceContainer\Exceptions\BindingResolutionException');
         $this->container->construct(DummyFilesystem::CLASS_NAME);
     }
     
@@ -88,7 +88,7 @@ class ConstructTest extends TestCase
      */
     public function it_should_recursively_resolve_dependencies_and_fail_if_it_is_not_possible()
     {
-        $this->expectException('RockSymphony\ServiceContainer\Exceptions\BindingResolutionException');
+        $this->setExpectedException('RockSymphony\ServiceContainer\Exceptions\BindingResolutionException');
         $this->container->construct(DummyCache::CLASS_NAME);
     }
     

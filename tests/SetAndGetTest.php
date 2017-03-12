@@ -50,7 +50,7 @@ class SetAndGetTest extends TestCase
      */
     public function it_should_fail_if_unknown_binding_requested()
     {
-        $this->expectException('RockSymphony\ServiceContainer\Exceptions\BindingResolutionException');
+        $this->setExpectedException('RockSymphony\ServiceContainer\Exceptions\BindingResolutionException');
         $this->container->resolve('unicorn');
     }
 }

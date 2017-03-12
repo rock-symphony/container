@@ -75,7 +75,7 @@ class CallTest extends TestCase
     {
         $this->container->set(CallTest::CLASS_NAME, $this);
         
-        $this->expectException('RockSymphony\ServiceContainer\Exceptions\BindingResolutionException');
+        $this->setExpectedException('RockSymphony\ServiceContainer\Exceptions\BindingResolutionException');
         
         $this->container->call([$this, 'inject_and_perform_assertions']);
     }
