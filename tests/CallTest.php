@@ -117,12 +117,10 @@ class CallTest extends TestCase
      */
     public function it_should_inject_dependencies_into_closures()
     {
-        $self = $this;
-
         $this->container->set(self::CLASS_NAME, $this);
 
-        $result = $this->container->call(function (CallTest $test, $challenge) use ($self) {
-            $self->assertSame($self, $test);
+        $result = $this->container->call(function (CallTest $test, $challenge) {
+            $this->assertSame($this, $test);
 
             return $challenge + 1;
         }, ['challenge' => 9]);
