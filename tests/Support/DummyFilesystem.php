@@ -17,7 +17,7 @@ class DummyFilesystem
      * @param string $type
      * @param array  $options
      */
-    public function __construct($root, $type = 'local', $options = array())
+    public function __construct($root, $type = 'local', $options = [])
     {
         $this->root = $root;
         $this->type = $type;
