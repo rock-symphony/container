@@ -126,7 +126,7 @@ class ServiceContainer implements ServiceContainerInterface
     {
         $this->dropStaleInstances($id);
 
-        $this->bindings[$id] = array('resolver' => $resolver, 'shared' => false);
+        $this->bindings[$id] = ['resolver' => $resolver, 'shared' => false];
     }
 
     /**
@@ -149,7 +149,7 @@ class ServiceContainer implements ServiceContainerInterface
     {
         $this->dropStaleInstances($id);
 
-        $this->bindings[$id] = array('resolver' => $resolver, 'shared' => true);
+        $this->bindings[$id] = ['resolver' => $resolver, 'shared' => true];
     }
 
     /**
@@ -324,7 +324,7 @@ class ServiceContainer implements ServiceContainerInterface
             throw new InvalidArgumentException('Method not provided.');
         }
 
-        return $this->call(array($this->resolve($segments[0]), $method), $parameters);
+        return $this->call([$this->resolve($segments[0]), $method], $parameters);
     }
 
     /**
