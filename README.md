@@ -28,7 +28,7 @@ Usage
 Use [composer](http://getcomposer.org/).
 
 ```sh
-composer require rock-symphony/container:^1.0
+composer require rock-symphony/container:^2.0
 ```
 
 ### Basics
