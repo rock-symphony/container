@@ -16,6 +16,10 @@
         "psr/container": "^1.0"
     },
 
+    "provide": {
+        "psr/container-implementation": "1.0"
+    },
+
     "autoload": {
         "psr-4": {
             "RockSymphony\\ServiceContainer\\": "src/"
