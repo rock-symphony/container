@@ -240,6 +240,8 @@ class ServiceContainer implements ServiceContainerInterface
      * @param callable|string $callback
      * @param array           $parameters
      *
+     * @throws \RockSymphony\ServiceContainer\Exceptions\BindingResolutionException
+     *
      * @return array
      */
     private function getMethodDependencies($callback, array $parameters = array())
@@ -280,6 +282,8 @@ class ServiceContainer implements ServiceContainerInterface
      * @param array                $parameters
      * @param array                $dependencies
      *
+     * @throws \RockSymphony\ServiceContainer\Exceptions\BindingResolutionException
+     *
      * @return void
      */
     private function addDependencyForCallParameter(ReflectionParameter $parameter, array &$parameters, &$dependencies)
@@ -304,6 +308,8 @@ class ServiceContainer implements ServiceContainerInterface
      *
      * @throws \InvalidArgumentException
      *
+     * @throws \RockSymphony\ServiceContainer\Exceptions\BindingResolutionException
+     *
      * @return mixed
      */
     private function callClass($target, array $parameters = array(), $defaultMethod = null)
@@ -327,6 +333,8 @@ class ServiceContainer implements ServiceContainerInterface
      *
      * @param string $abstract
      * @param array  $parameters
+     *
+     * @throws \RockSymphony\ServiceContainer\Exceptions\BindingResolutionException
      *
      * @return mixed
      */
@@ -478,6 +486,8 @@ class ServiceContainer implements ServiceContainerInterface
      *
      * @param array $parameters
      * @param array $primitives
+     *
+     * @throws \RockSymphony\ServiceContainer\Exceptions\BindingResolutionException
      *
      * @return array
      */
