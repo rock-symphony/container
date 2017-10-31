@@ -307,7 +307,6 @@ class ServiceContainer implements ServiceContainerInterface
      * @param string|null $defaultMethod
      *
      * @throws \InvalidArgumentException
-     *
      * @throws \RockSymphony\ServiceContainer\Exceptions\BindingResolutionException
      *
      * @return mixed
