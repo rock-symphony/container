@@ -21,42 +21,42 @@ class ServiceContainer implements ServiceContainerInterface
      *
      * @var array
      */
-    protected $resolved = array();
+    protected $resolved = [];
 
     /**
      * The container's bindings.
      *
      * @var array
      */
-    protected $bindings = array();
+    protected $bindings = [];
 
     /**
      * The container's shared instances.
      *
      * @var array
      */
-    protected $instances = array();
+    protected $instances = [];
 
     /**
      * The registered type aliases.
      *
      * @var array
      */
-    protected $aliases = array();
+    protected $aliases = [];
 
     /**
      * The extension closures for services.
      *
      * @var array
      */
-    protected $extenders = array();
+    protected $extenders = [];
 
     /**
      * The stack of concretions currently being built.
      *
      * @var array
      */
-    protected $buildStack = array();
+    protected $buildStack = [];
 
     /**
      * Returns true if the container can return an entry for the given identifier.
@@ -195,7 +195,7 @@ class ServiceContainer implements ServiceContainerInterface
      *
      * @return mixed
      */
-    public function call($callback, array $parameters = array(), $defaultMethod = null)
+    public function call($callback, array $parameters = [], $defaultMethod = null)
     {
         if ($this->isCallableWithAtSign($callback) || $defaultMethod) {
             return $this->callClass($callback, $parameters, $defaultMethod);
@@ -244,9 +244,9 @@ class ServiceContainer implements ServiceContainerInterface
      *
      * @return array
      */
-    private function getMethodDependencies($callback, array $parameters = array())
+    private function getMethodDependencies($callback, array $parameters = [])
     {
-        $dependencies = array();
+        $dependencies = [];
 
         foreach ($this->getCallReflector($callback)->getParameters() as $parameter) {
             $this->addDependencyForCallParameter($parameter, $parameters, $dependencies);
@@ -311,7 +311,7 @@ class ServiceContainer implements ServiceContainerInterface
      *
      * @return mixed
      */
-    private function callClass($target, array $parameters = array(), $defaultMethod = null)
+    private function callClass($target, array $parameters = [], $defaultMethod = null)
     {
         $segments = explode('@', $target);
 
@@ -337,7 +337,7 @@ class ServiceContainer implements ServiceContainerInterface
      *
      * @return mixed
      */
-    public function resolve($abstract, array $parameters = array())
+    public function resolve($abstract, array $parameters = [])
     {
         $abstract = $this->getAlias($abstract);
 
@@ -412,7 +412,7 @@ class ServiceContainer implements ServiceContainerInterface
             return $this->extenders[$abstract];
         }
 
-        return array();
+        return [];
     }
 
     /**
@@ -425,7 +425,7 @@ class ServiceContainer implements ServiceContainerInterface
      *
      * @return mixed
      */
-    public function construct($concrete, array $parameters = array())
+    public function construct($concrete, array $parameters = [])
     {
         try {
             $reflector = new ReflectionClass($concrete);
@@ -490,9 +490,9 @@ class ServiceContainer implements ServiceContainerInterface
      *
      * @return array
      */
-    private function getDependencies(array $parameters, array $primitives = array())
+    private function getDependencies(array $parameters, array $primitives = [])
     {
-        $dependencies = array();
+        $dependencies = [];
 
         foreach ($parameters as $parameter) {
             $dependency = $parameter->getClass();
