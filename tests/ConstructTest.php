@@ -48,13 +48,13 @@ class ConstructTest extends TestCase
     public function it_should_instantiate_new_instances_with_a_subset_of_parameters_passed()
     {
         /** @var DummyCounter $counter */
-        $counter = $this->container->construct(DummyCounter::CLASS_NAME, array('step' => 25));
+        $counter = $this->container->construct(DummyCounter::CLASS_NAME, ['step' => 25]);
         $this->assertTrue($counter instanceof DummyCounter);
         $this->assertEquals(0, $counter->start);
         $this->assertEquals(25, $counter->step);
 
         /** @var DummyCounter $counter2 */
-        $counter2 = $this->container->construct(DummyCounter::CLASS_NAME, array('start' => 10));
+        $counter2 = $this->container->construct(DummyCounter::CLASS_NAME, ['start' => 10]);
         $this->assertTrue($counter2 instanceof DummyCounter);
         $this->assertEquals(10, $counter2->start);
         $this->assertEquals(1, $counter2->step);
@@ -68,7 +68,7 @@ class ConstructTest extends TestCase
     public function it_should_instantiate_new_instances_with_numeric_array()
     {
         /** @var DummyCounter $counter */
-        $counter = $this->container->construct(DummyCounter::CLASS_NAME, array(/* start = */ 5, /* step = */ 10));
+        $counter = $this->container->construct(DummyCounter::CLASS_NAME, [/* start = */ 5, /* step = */ 10]);
         $this->assertTrue($counter instanceof DummyCounter);
         $this->assertEquals(5, $counter->start);
         $this->assertEquals(10, $counter->step);
@@ -105,10 +105,10 @@ class ConstructTest extends TestCase
         });
 
         /** @var DummyCache $cache */
-        $cache = $this->container->construct(DummyCache::CLASS_NAME, array('options' => array('ttl' => '1 year')));
+        $cache = $this->container->construct(DummyCache::CLASS_NAME, ['options' => ['ttl' => '1 year']]);
         $this->assertTrue($cache instanceof DummyCache);
         $this->assertTrue($cache->filesystem instanceof DummyFilesystem);
         $this->assertTrue($is_bind_resolution_called);
-        $this->assertEquals(array('ttl' => '1 year'), $cache->options);
+        $this->assertEquals(['ttl' => '1 year'], $cache->options);
     }
 }
