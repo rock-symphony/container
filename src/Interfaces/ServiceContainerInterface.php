@@ -108,7 +108,7 @@ interface ServiceContainerInterface extends PsrContainerInterface
      *
      * @return mixed
      */
-    public function construct($class, array $parameters = array());
+    public function construct($class, array $parameters = []);
 
     /**
      * Call the given Closure / class@method and inject its dependencies.
@@ -119,7 +119,7 @@ interface ServiceContainerInterface extends PsrContainerInterface
      *
      * @return mixed
      */
-    public function call($callback, array $parameters = array(), $defaultMethod = null);
+    public function call($callback, array $parameters = [], $defaultMethod = null);
 
     /**
      * Resolves an abstract dependency from container or instantiate a new instance of given class.

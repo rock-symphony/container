@@ -1,12 +1,10 @@
 preset: recommended
 
 enabled:
-    - long_array_syntax
     - concat_with_spaces
     - no_blank_lines_before_namespace
     - not_operator_with_space
 
 disabled:
-    - short_array_syntax
     - concat_without_spaces
     - single_blank_line_before_namespace
