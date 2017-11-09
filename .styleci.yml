@@ -8,3 +8,4 @@ enabled:
 disabled:
     - concat_without_spaces
     - single_blank_line_before_namespace
+    - self_accessor
