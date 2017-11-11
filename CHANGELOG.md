@@ -1,6 +1,9 @@
 Changelog
 =========
 
+### 3.0.0 - Drop ->resolve() method $parameters argument
+- Drop ->resolve() method $parameters argument to fix behavior ambiguity
+
 ### 2.0.0 — Drop PHP 5.3 support, allow PHP 7.2
 - Drop PHP 5.3 support — make the code cleaner. People still using PHP 5.3 can use v1.x.
 - Allow usage with PHP 7.2 
