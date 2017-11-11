@@ -331,13 +331,12 @@ class ServiceContainer implements ServiceContainerInterface
      * Resolve the given type from the container.
      *
      * @param string $abstract
-     * @param array  $parameters
      *
      * @throws \RockSymphony\ServiceContainer\Exceptions\BindingResolutionException
      *
      * @return mixed
      */
-    public function resolve($abstract, array $parameters = [])
+    public function resolve($abstract)
     {
         $abstract = $this->getAlias($abstract);
 
@@ -354,11 +353,11 @@ class ServiceContainer implements ServiceContainerInterface
         // the binding. This will instantiate the types, as well as resolve any of
         // its "nested" dependencies recursively until all have gotten resolved.
         if ($concrete === $abstract) {
-            $object = $this->construct($concrete, $parameters);
+            $object = $this->construct($concrete);
         } elseif ($concrete instanceof Closure) {
-            $object = $concrete($this, $parameters);
+            $object = $concrete($this);
         } else {
-            $object = $this->resolve($concrete, $parameters);
+            $object = $this->resolve($concrete);
         }
 
         // If we defined any extenders for this type, we'll need to spin through them
