@@ -209,7 +209,7 @@ class ServiceContainer implements ServiceContainerInterface
                 return call_user_func_array($callback, $dependencies);
             } catch (Exception $e) {
                 // wrap extension with ServiceContainer exception
-                throw new BindingResolutionException($e->getMessage(), $e->getCode(), $e);
+                throw new BindingResolutionException($e->getMessage(), 0, $e);
             }
         }
 
@@ -218,7 +218,7 @@ class ServiceContainer implements ServiceContainerInterface
             return call_user_func_array($callback, $dependencies);
         } catch (\Throwable $e) {
             // wrap extension with ServiceContainer exception
-            throw new BindingResolutionException($e->getMessage(), $e->getCode(), $e);
+            throw new BindingResolutionException($e->getMessage(), 0, $e);
         }
     }
 
