@@ -76,7 +76,7 @@ class CallTest extends TestCase
         $this->container->set(self::CLASS_NAME, $this);
 
         // TODO: Fix this for PRE PHP 7.0
-        $this->setExpectedException('ArgumentCountError');
+        $this->setExpectedExceptionRegExp('ArgumentCountError');
 
         $this->container->call(array($this, 'inject_and_perform_assertions'));
     }
