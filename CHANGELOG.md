@@ -1,6 +1,9 @@
 Changelog
 =========
 
+### 3.0.2
+- Fix exception silencing inside `::call()` call 
+
 ### 3.0.0 - Drop ->resolve() method $parameters argument
 - Drop ->resolve() method $parameters argument to fix behavior ambiguity
 
