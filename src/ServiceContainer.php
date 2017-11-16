@@ -203,23 +203,7 @@ class ServiceContainer implements ServiceContainerInterface
 
         $dependencies = $this->getMethodDependencies($callback, $parameters);
 
-        if (version_compare(PHP_VERSION, '7.0.0', '<')) {
-            // Pre-PHP7 branch
-            try {
-                return call_user_func_array($callback, $dependencies);
-            } catch (Exception $e) {
-                // wrap extension with ServiceContainer exception
-                throw new BindingResolutionException($e->getMessage(), 0, $e);
-            }
-        }
-
-        // Modern PHP7 try/catch block
-        try {
-            return call_user_func_array($callback, $dependencies);
-        } catch (\Throwable $e) {
-            // wrap extension with ServiceContainer exception
-            throw new BindingResolutionException($e->getMessage(), 0, $e);
-        }
+        return call_user_func_array($callback, $dependencies);
     }
 
     /**

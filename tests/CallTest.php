@@ -75,7 +75,11 @@ class CallTest extends TestCase
     {
         $this->container->set(self::CLASS_NAME, $this);
 
-        $this->setExpectedException('RockSymphony\ServiceContainer\Exceptions\BindingResolutionException');
+        if (version_compare(PHP_VERSION, '7.1.0') >= 0) {
+            $this->setExpectedException('ArgumentCountError');
+        } else {
+            $this->setExpectedException('PHPUnit_Framework_Error');
+        }
 
         $this->container->call([$this, 'inject_and_perform_assertions']);
     }
