@@ -2,9 +2,8 @@
 namespace RockSymphony\ServiceContainer\Tests;
 
 use PHPUnit\Framework\TestCase;
-use RockSymphony\ServiceContainer\ServiceContainerLayer;
 use RockSymphony\ServiceContainer\ServiceContainer;
-use RockSymphony\ServiceContainer\Tests\Support\DummyCache;
+use RockSymphony\ServiceContainer\ServiceContainerLayer;
 use RockSymphony\ServiceContainer\Tests\Support\DummyFilesystem;
 use RockSymphony\ServiceContainer\Tests\Support\DummyFilesystemDecorator;
 
@@ -23,6 +22,7 @@ class LayerTest extends TestCase
         $this->assertTrue($layer->has('test_instance'));
         $this->assertSame($this, $layer->get('test_instance'));
     }
+
     /**
      * @test
      */

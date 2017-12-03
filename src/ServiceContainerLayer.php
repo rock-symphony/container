@@ -32,9 +32,10 @@ class ServiceContainerLayer extends ServiceContainer implements ServiceContainer
     /**
      * @param string $id
      *
-     * @return mixed
      * @throws \RockSymphony\ServiceContainer\Exceptions\BindingNotFoundException
      * @throws \RockSymphony\ServiceContainer\Exceptions\BindingResolutionException
+     *
+     * @return mixed
      */
     public function get($id)
     {
@@ -59,9 +60,10 @@ class ServiceContainerLayer extends ServiceContainer implements ServiceContainer
      * @param string $abstract
      * @param array  $parameters
      *
-     * @return mixed
      * @throws \RockSymphony\ServiceContainer\Exceptions\BindingNotFoundException
      * @throws \RockSymphony\ServiceContainer\Exceptions\BindingResolutionException
+     *
+     * @return mixed
      */
     public function resolve($abstract, array $parameters = [])
     {
