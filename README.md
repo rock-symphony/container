@@ -182,11 +182,17 @@ Think of it as JavaScript variables scopes: a nested scope inherits all the vari
 But defining new scope variables won't modify the parent scope. That's it.
 
 ```php
+$parent = new ServiceContainer();
+$parent->set('configuration', $global_configuration);
+
 $layer = new ServiceContainerLayer($existing_container);
 $layer->set('configuration', $layer_configuration); 
 $layer->bindResolver('layer_scope_service', ...);
 // and so on
+
+var_dump($parent->get('configuration') === $layer->get('configuration')); // "false"
 ```      
+
 
 ### Automatic dependency injection 
 
