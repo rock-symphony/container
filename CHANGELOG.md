@@ -2,7 +2,7 @@ Changelog
 =========
 
 ### 3.1.0
-- Add Container Layers isolation - #13
+- Add Container Layers isolation - #15
 
 ### 3.0.2
 - Fix exception silencing inside `::call()` call 
