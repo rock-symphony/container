@@ -58,29 +58,28 @@ class ServiceContainerLayer extends ServiceContainer implements ServiceContainer
 
     /**
      * @param string $abstract
-     * @param array  $parameters
      *
      * @throws \RockSymphony\ServiceContainer\Exceptions\BindingNotFoundException
      * @throws \RockSymphony\ServiceContainer\Exceptions\BindingResolutionException
      *
      * @return mixed
      */
-    public function resolve($abstract, array $parameters = [])
+    public function resolve($abstract)
     {
         // If it's bound to THIS layer, resolve it.
         // This layer takes priority.
         if (parent::has($abstract)) {
-            return parent::resolve($abstract, $parameters);
+            return parent::resolve($abstract);
         }
 
         // If it's bound to PARENT layer, resolve it there.
         // Getting a known service from parent level is better
         // than re-resolving it here.
         if ($this->parentLayer->has($abstract)) {
-            return $this->parentLayer->resolve($abstract, $parameters);
+            return $this->parentLayer->resolve($abstract);
         }
 
         // Otherwise, resolve the service from scratch here.
-        return parent::resolve($abstract, $parameters);
+        return parent::resolve($abstract);
     }
 }
