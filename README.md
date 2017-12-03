@@ -172,6 +172,27 @@ $cache = $container->get('cache'); // DateTime object
 ```
 
 
+### Isolated extension to service container
+
+A use-case: you want to create a new container inheriting services from the existing one. 
+But you don't want to re-define the services again, using the originally defined ones.
+Also you want to provide more services, without modifying the original container.
+
+Think of it as JavaScript variables scopes: a nested scope inherits all the variables from parent scope.
+But defining new scope variables won't modify the parent scope. That's it.
+
+```php
+$parent = new ServiceContainer();
+$parent->set('configuration', $global_configuration);
+
+$layer = new ServiceContainerLayer($existing_container);
+$layer->set('configuration', $layer_configuration); 
+$layer->bindResolver('layer_scope_service', ...);
+// and so on
+
+var_dump($parent->get('configuration') === $layer->get('configuration')); // "false"
+```      
+
 
 ### Automatic dependency injection 
 
